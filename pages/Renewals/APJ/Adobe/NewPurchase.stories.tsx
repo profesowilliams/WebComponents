@@ -1,19 +1,9 @@
-import '../../../../../components/Lit/Flyout';
-import '../../../../../components/Lit/Flyout/FlyoutHeader';
-import '../../../../../components/Lit/Flyout/FlyoutBody';
-import '../../../../../components/Lit/Flyout/FlyoutFooter';
-import '../../../../../components/Lit/Flyout/FlyoutButton';
-import '../../../../../components/Lit/Heading';
-import '../../../../../components/Lit/Notification';
-// import '../../../../../components/Lit/FormGroup';
-import '../../../../../components/Lit/Input';
-import '../../../../../components/Lit/Input/Checkbox';
-import '../../../../../components/Lit/Modal';
-import '../../../../../components/Lit/Modal/ModalHeader';
-import '../../../../../components/Lit/Modal/ModalBody';
-import '../../../../../components/Lit/Modal/ModalFooter';
-import '../../../../../components/Lit/Modal/ModalButton';
-import '../../../../../components/Lit/Modal/ModalTitle';
+import '../../../../components/Flyout';
+import '../../../../components/Heading';
+import '../../../../components/Notification';
+// import '../../../../../components/FormGroup';
+import '../../../../components/Input';
+import '../../../../components/Modal';
 
 export default {
   title: 'Pages/Adobe/New Purchase Flyout',

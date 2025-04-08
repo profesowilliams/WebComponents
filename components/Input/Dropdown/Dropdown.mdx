@@ -1,0 +1,54 @@
+# tds-dropdown
+
+## Properties
+
+| Property                 | Attribute                | Type                                 | Default              |
+|--------------------------|--------------------------|--------------------------------------|----------------------|
+| `DEBOUNCE_TIMEOUT_MS`    |                          | `number`                             | 100                  |
+| `comboBox`               |                          | `HTMLElement`                        |                      |
+| `currentListItemFocused` | `currentListItemFocused` | `number`                             | -1                   |
+| `debounceTimeout`        |                          | `number \| undefined`                |                      |
+| `disabled`               | `disabled`               | `boolean`                            | false                |
+| `dropdownArrow`          |                          | `HTMLElement`                        |                      |
+| `errormessage`           | `errormessage`           | `string \| undefined`                |                      |
+| `filteredResults`        | `filteredResults`        | `{ text: string; value: string; }[]` | []                   |
+| `id`                     | `id`                     | `string`                             | "autocomplete-input" |
+| `input`                  |                          | `HTMLInputElement`                   |                      |
+| `isDropDownOpen`         | `isDropDownOpen`         | `boolean`                            | false                |
+| `label`                  | `label`                  | `string`                             | "Choose a value"     |
+| `maxlength`              | `maxlength`              | `number \| undefined`                |                      |
+| `minlength`              | `minlength`              | `number \| undefined`                |                      |
+| `multiselect`            | `multiselect`            | `boolean`                            | false                |
+| `optionTextKey`          | `optionTextKey`          | `"text" \| "value"`                  | "text"               |
+| `optionValueKey`         | `optionValueKey`         | `"text" \| "value"`                  | "value"              |
+| `options`                | `options`                | `{ text: string; value: string; }[]` | []                   |
+| `required`               | `required`               | `boolean`                            | false                |
+| `resultsList`            |                          | `HTMLUListElement`                   |                      |
+| `selectedValues`         | `selectedValues`         | `string[]`                           | []                   |
+| `size`                   | `size`                   | `number \| undefined`                |                      |
+| `slotElement`            |                          | `HTMLSlotElement`                    |                      |
+| `supporttext`            | `supporttext`            | `string \| undefined`                |                      |
+| `value`                  | `value`                  | `string`                             | ""                   |
+
+## Methods
+
+| Method                 | Type                                             |
+|------------------------|--------------------------------------------------|
+| `closeDropdown`        | `(): void`                                       |
+| `filterResults`        | `(value: string): void`                          |
+| `focusListItem`        | `(listItemNode: HTMLElement): void`              |
+| `getInputTextValue`    | `(): string`                                     |
+| `handleKeyboardEvents` | `(event: KeyboardEvent): void`                   |
+| `handleOutsideClick`   | `(event: MouseEvent): void`                      |
+| `onInput`              | `(event: InputEvent): void`                      |
+| `openDropdown`         | `(): void`                                       |
+| `selectValue`          | `(value: { text: string; value: string; }): void` |
+| `toggleDropdown`       | `(event: Event): void`                           |
+| `updateInputValue`     | `(): void`                                       |
+| `validateInput`        | `(): void`                                       |
+
+## Events
+
+| Event           | Type                                            |
+|-----------------|-------------------------------------------------|
+| `value-changed` | `CustomEvent<{ value: string; text: string; }>` |

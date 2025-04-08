@@ -1,0 +1,5427 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="src/components/Input/File/File" />
+
+## 
+**AST Node Type:** *GetAccessor*
+
+#### JSDoc annotations:
+
+Styles for the file input component.
+
+```bash
+@returns {CSSResult} - Returns a CSS template with custom styles.
+```
+
+#### Code:
+
+```ts
+get;
+styles();
+{
+    return css `
+      ${unsafeCSS(customStyles)}
+    `;
+}
+
+```
+
+## 
+**AST Node Type:** *PropertyDeclaration*
+
+#### JSDoc annotations:
+
+List of files being uploaded with their progress and error status.
+
+```bash
+@type {FileUploadProgress[]}
+```
+
+#### Code:
+
+```ts
+files: FileUploadProgress[] = [];
+
+```
+
+## 
+**AST Node Type:** *PropertyDeclaration*
+
+#### JSDoc annotations:
+
+Indicates if the drag area is active.
+
+```bash
+@type {boolean}
+```
+
+#### Code:
+
+```ts
+isDragOver = false;
+
+```
+
+## 
+**AST Node Type:** *PropertyDeclaration*
+
+#### JSDoc annotations:
+
+Maximum allowed file size for uploads.
+
+```bash
+@type {string}
+```
+
+#### Code:
+
+```ts
+maxFileSize = '2MB';
+
+```
+
+## 
+**AST Node Type:** *PropertyDeclaration*
+
+#### JSDoc annotations:
+
+Name of the icon used in the upload area.
+
+```bash
+@type {string}
+```
+
+#### Code:
+
+```ts
+iconName = 'upload';
+
+```
+
+## 
+**AST Node Type:** *PropertyDeclaration*
+
+#### JSDoc annotations:
+
+State of the icon used in the upload area.
+
+```bash
+@type {string}
+```
+
+#### Code:
+
+```ts
+iconState = 'default';
+
+```
+
+## 
+**AST Node Type:** *PropertyDeclaration*
+
+#### JSDoc annotations:
+
+Heading text displayed in the drop area.
+
+```bash
+@type {string}
+```
+
+#### Code:
+
+```ts
+headingText = 'Drag & Drop or Choose file from device';
+
+```
+
+## 
+**AST Node Type:** *PropertyDeclaration*
+
+#### JSDoc annotations:
+
+Secondary text indicating file size limit.
+
+```bash
+@type {string}
+```
+
+#### Code:
+
+```ts
+secondaryText = 'Max file size';
+
+```
+
+## 
+**AST Node Type:** *PropertyDeclaration*
+
+#### JSDoc annotations:
+
+Text for the browse button.
+
+```bash
+@type {string}
+```
+
+#### Code:
+
+```ts
+buttonText = 'Browse file';
+
+```
+
+## 
+**AST Node Type:** *PropertyDeclaration*
+
+#### JSDoc annotations:
+
+List of allowed file types for uploads.
+
+```bash
+@type {string[]}
+```
+
+#### Code:
+
+```ts
+allowedFileTypes: string[] = ['application/pdf'];
+
+```
+
+## clearFiles
+`src/components/Input/File/File`
+
+**AST Node Type:** *MethodDeclaration*
+
+#### JSDoc annotations:
+
+Clears all uploaded files.
+
+```bash
+
+```
+
+#### Code:
+
+```ts
+@customElement('tds-file-input')
+export class FileInput extends LitElement {
+    static get styles() {
+        return css `
+      ${unsafeCSS(customStyles)}
+    `;
+    }
+    @property({ type: Array })
+    files: FileUploadProgress[] = [];
+    @property({ type: Boolean })
+    isDragOver = false;
+    @property({ type: String })
+    maxFileSize = '2MB';
+    @property({ type: String })
+    iconName = 'upload';
+    @property({ type: String })
+    iconState = 'default';
+    @property({ type: String })
+    headingText = 'Drag & Drop or Choose file from device';
+    @property({ type: String })
+    secondaryText = 'Max file size';
+    @property({ type: String })
+    buttonText = 'Browse file';
+    @property({ type: Array })
+    allowedFileTypes: string[] = ['application/pdf'];
+    public clearFiles(): void {
+        this.files = [];
+    }
+    private mimeTypeToLabel = mimeTypeToLabel;
+    connectedCallback() {
+        super.connectedCallback();
+        document.addEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.addEventListener('clear-file-uploads', this.handleClearFiles);
+    }
+    disconnectedCallback() {
+        document.removeEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.removeEventListener('clear-file-uploads', this.handleClearFiles);
+        super.disconnectedCallback();
+    }
+    private handleClearFiles = (): void => {
+        this.clearFiles();
+    };
+    private handleFileError = (event: CustomEvent<{
+        fileName: string;
+        error: string;
+    }>) => {
+        const { fileName, error } = event.detail;
+        console.log('Handling error for file:', fileName, 'with error:', error);
+        this.files = this.files.map((fileUpload) => fileUpload.file.name === fileName ? { ...fileUpload, error } : fileUpload);
+    };
+    render(): TemplateResult {
+        return html `
+      <div class="file-input">
+        <div class="file-upload">
+          <label>Upload Template File</label>
+          <div
+            class=${classMap({ 'drop-area': true, dragover: this.isDragOver })}
+            @dragover="${this.handleDragOver}"
+            @dragenter="${this.handleDragEnter}"
+            @dragleave="${this.handleDragLeave}"
+            @drop="${this.handleDrop}"
+            @click="${this.handleClick}"
+          >
+            <tds-icon
+              name="${this.iconName}"
+              state="${this.iconState}"
+            ></tds-icon>
+            <div class="file-text">
+              <tds-heading as="h10">
+                <strong>${this.headingText}</strong>
+              </tds-heading>
+              <p class="extra-small">
+                ${this.formatAllowedFileTypes()}, ${this.secondaryText}
+                ${this.maxFileSize}.
+              </p>
+            </div>
+            <tds-button
+              type="button"
+              variant="filled"
+              theme="light"
+              label="Button"
+              color="teal"
+              compact
+            >
+              ${this.buttonText}
+            </tds-button>
+          </div>
+        </div>
+        ${this.files.length > 0
+            ? html `
+              <div class="file-list">
+                ${this.files.map((fileUpload, index) => html `
+                    <div class="file-item">
+                      <div class="file-progress">
+                        <div class="file-name">${fileUpload.file.name}</div>
+                        <div class="file-size">
+                          ${this.formatFileSize(fileUpload.file.size)}
+                        </div>
+                        <div class="progress-bar">
+                          <div
+                            class="progress ${fileUpload.error
+                ? 'progress-error'
+                : ''}"
+                            style="
+                              --progress-width: ${fileUpload.progress}%;
+                              background-color: ${fileUpload.error
+                ? '#cd163f'
+                : fileUpload.progress === 100
+                    ? '#4caf50'
+                    : '#F7B500'};
+                            "
+                          ></div>
+                          <span class="progress-percentage">
+                            ${fileUpload.error
+                ? '0%'
+                : `${fileUpload.progress}%`}
+                          </span>
+                        </div>
+                        ${fileUpload.error
+                ? html `<div class="error-message">
+                              ${fileUpload.error}
+                            </div>`
+                : ''}
+                      </div>
+                      <tds-file-close
+                        @click="${() => this.removeFile(index)}"
+                      ></tds-file-close>
+                    </div>
+                  `)}
+              </div>
+            `
+            : ''}
+      </div>
+    `;
+    }
+    private formatAllowedFileTypes(): string {
+        const types = this.allowedFileTypes || [];
+        return types.map((type) => this.mimeTypeToLabel[type] || type).join(', ');
+    }
+    private parseFileSize(size: string): number {
+        const units: Record<string, number> = {
+            B: 1,
+            KB: 1024,
+            MB: 1024 * 1024,
+            GB: 1024 * 1024 * 1024,
+        };
+        const match = size.match(/^(\d+(?:\.\d+)?)\s*(B|KB|MB|GB)$/i);
+        if (!match)
+            throw new Error('Invalid file size format');
+        const value = parseFloat(match[1]);
+        const unit = match[2].toUpperCase();
+        return value * (units[unit] || 1);
+    }
+    private handleDragOver(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    private handleDragEnter(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = true;
+    }
+    private handleDragLeave(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = false;
+    }
+    private handleDrop(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+        this.isDragOver = false;
+        const droppedFiles = Array.from(event.dataTransfer?.files || []);
+        this.addFiles(droppedFiles);
+        this.dispatchFilesEvent(droppedFiles);
+    }
+    private handleClick(): void {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.multiple = true;
+        fileInput.accept = this.allowedFileTypes.join(',');
+        fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+        fileInput.click();
+    }
+    private handleFileSelect(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        const selectedFiles = Array.from(input.files || []);
+        this.addFiles(selectedFiles);
+        this.dispatchFilesEvent(selectedFiles);
+    }
+    private addFiles(newFiles: File[]): void {
+        const maxSizeInBytes = this.parseFileSize(this.maxFileSize);
+        const validFiles = newFiles.map((file) => {
+            if (!this.isFileTypeAllowed(file)) {
+                return { file, progress: 0, error: 'Invalid file type.' };
+            }
+            if (file.size > maxSizeInBytes) {
+                return { file, progress: 0, error: 'File size exceeds the limit.' };
+            }
+            return { file, progress: 0 };
+        });
+        this.files = [...this.files, ...validFiles];
+        setTimeout(() => this.forceReflow(), 0);
+        this.simulateUploadProgress(validFiles.filter((file) => !file.error));
+        this.dispatchFilesEvent(newFiles);
+    }
+    private dispatchFilesEvent(files: File[]): void {
+        const event = new CustomEvent('file-selected', {
+            detail: { files },
+            bubbles: false,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private isFileTypeAllowed(file: File): boolean {
+        return this.allowedFileTypes.includes(file.type);
+    }
+    private forceReflow(): void {
+        const progressElements = this.shadowRoot?.querySelectorAll('.progress');
+        progressElements?.forEach((el) => el.getBoundingClientRect());
+    }
+    private removeFile(index: number): void {
+        const removedFile = this.files[index];
+        this.files = this.files.filter((_, i) => i !== index);
+        const event = new CustomEvent('file-removed', {
+            detail: { removedFile },
+            bubbles: true,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private formatFileSize(size: number): string {
+        if (size < 1024) {
+            return `${size} bytes`;
+        }
+        else if (size < 1048576) {
+            return `${(size / 1024).toFixed(2)} KB`;
+        }
+        else {
+            return `${(size / 1048576).toFixed(2)} MB`;
+        }
+    }
+    private simulateUploadProgress(files: FileUploadProgress[]): void {
+        files.forEach((fileUpload) => {
+            const interval = setInterval(() => {
+                if (fileUpload.progress >= 100) {
+                    clearInterval(interval);
+                }
+                else {
+                    fileUpload.progress += 10;
+                    this.files = [...this.files];
+                }
+            }, 300);
+        });
+    }
+}
+
+```
+
+## 
+**AST Node Type:** *PropertyDeclaration*
+
+#### JSDoc annotations:
+
+Mapping of MIME types to human-readable labels.
+
+```bash
+@type {Record<string, string>}
+```
+
+#### Code:
+
+```ts
+mimeTypeToLabel = mimeTypeToLabel;
+
+```
+
+## connectedCallback
+`src/components/Input/File/File`
+
+**AST Node Type:** *MethodDeclaration*
+
+#### JSDoc annotations:
+
+Lifecycle hook called when the element is added to the DOM.
+
+```bash
+
+```
+
+#### Code:
+
+```ts
+@customElement('tds-file-input')
+export class FileInput extends LitElement {
+    static get styles() {
+        return css `
+      ${unsafeCSS(customStyles)}
+    `;
+    }
+    @property({ type: Array })
+    files: FileUploadProgress[] = [];
+    @property({ type: Boolean })
+    isDragOver = false;
+    @property({ type: String })
+    maxFileSize = '2MB';
+    @property({ type: String })
+    iconName = 'upload';
+    @property({ type: String })
+    iconState = 'default';
+    @property({ type: String })
+    headingText = 'Drag & Drop or Choose file from device';
+    @property({ type: String })
+    secondaryText = 'Max file size';
+    @property({ type: String })
+    buttonText = 'Browse file';
+    @property({ type: Array })
+    allowedFileTypes: string[] = ['application/pdf'];
+    public clearFiles(): void {
+        this.files = [];
+    }
+    private mimeTypeToLabel = mimeTypeToLabel;
+    connectedCallback() {
+        super.connectedCallback();
+        document.addEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.addEventListener('clear-file-uploads', this.handleClearFiles);
+    }
+    disconnectedCallback() {
+        document.removeEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.removeEventListener('clear-file-uploads', this.handleClearFiles);
+        super.disconnectedCallback();
+    }
+    private handleClearFiles = (): void => {
+        this.clearFiles();
+    };
+    private handleFileError = (event: CustomEvent<{
+        fileName: string;
+        error: string;
+    }>) => {
+        const { fileName, error } = event.detail;
+        console.log('Handling error for file:', fileName, 'with error:', error);
+        this.files = this.files.map((fileUpload) => fileUpload.file.name === fileName ? { ...fileUpload, error } : fileUpload);
+    };
+    render(): TemplateResult {
+        return html `
+      <div class="file-input">
+        <div class="file-upload">
+          <label>Upload Template File</label>
+          <div
+            class=${classMap({ 'drop-area': true, dragover: this.isDragOver })}
+            @dragover="${this.handleDragOver}"
+            @dragenter="${this.handleDragEnter}"
+            @dragleave="${this.handleDragLeave}"
+            @drop="${this.handleDrop}"
+            @click="${this.handleClick}"
+          >
+            <tds-icon
+              name="${this.iconName}"
+              state="${this.iconState}"
+            ></tds-icon>
+            <div class="file-text">
+              <tds-heading as="h10">
+                <strong>${this.headingText}</strong>
+              </tds-heading>
+              <p class="extra-small">
+                ${this.formatAllowedFileTypes()}, ${this.secondaryText}
+                ${this.maxFileSize}.
+              </p>
+            </div>
+            <tds-button
+              type="button"
+              variant="filled"
+              theme="light"
+              label="Button"
+              color="teal"
+              compact
+            >
+              ${this.buttonText}
+            </tds-button>
+          </div>
+        </div>
+        ${this.files.length > 0
+            ? html `
+              <div class="file-list">
+                ${this.files.map((fileUpload, index) => html `
+                    <div class="file-item">
+                      <div class="file-progress">
+                        <div class="file-name">${fileUpload.file.name}</div>
+                        <div class="file-size">
+                          ${this.formatFileSize(fileUpload.file.size)}
+                        </div>
+                        <div class="progress-bar">
+                          <div
+                            class="progress ${fileUpload.error
+                ? 'progress-error'
+                : ''}"
+                            style="
+                              --progress-width: ${fileUpload.progress}%;
+                              background-color: ${fileUpload.error
+                ? '#cd163f'
+                : fileUpload.progress === 100
+                    ? '#4caf50'
+                    : '#F7B500'};
+                            "
+                          ></div>
+                          <span class="progress-percentage">
+                            ${fileUpload.error
+                ? '0%'
+                : `${fileUpload.progress}%`}
+                          </span>
+                        </div>
+                        ${fileUpload.error
+                ? html `<div class="error-message">
+                              ${fileUpload.error}
+                            </div>`
+                : ''}
+                      </div>
+                      <tds-file-close
+                        @click="${() => this.removeFile(index)}"
+                      ></tds-file-close>
+                    </div>
+                  `)}
+              </div>
+            `
+            : ''}
+      </div>
+    `;
+    }
+    private formatAllowedFileTypes(): string {
+        const types = this.allowedFileTypes || [];
+        return types.map((type) => this.mimeTypeToLabel[type] || type).join(', ');
+    }
+    private parseFileSize(size: string): number {
+        const units: Record<string, number> = {
+            B: 1,
+            KB: 1024,
+            MB: 1024 * 1024,
+            GB: 1024 * 1024 * 1024,
+        };
+        const match = size.match(/^(\d+(?:\.\d+)?)\s*(B|KB|MB|GB)$/i);
+        if (!match)
+            throw new Error('Invalid file size format');
+        const value = parseFloat(match[1]);
+        const unit = match[2].toUpperCase();
+        return value * (units[unit] || 1);
+    }
+    private handleDragOver(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    private handleDragEnter(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = true;
+    }
+    private handleDragLeave(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = false;
+    }
+    private handleDrop(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+        this.isDragOver = false;
+        const droppedFiles = Array.from(event.dataTransfer?.files || []);
+        this.addFiles(droppedFiles);
+        this.dispatchFilesEvent(droppedFiles);
+    }
+    private handleClick(): void {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.multiple = true;
+        fileInput.accept = this.allowedFileTypes.join(',');
+        fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+        fileInput.click();
+    }
+    private handleFileSelect(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        const selectedFiles = Array.from(input.files || []);
+        this.addFiles(selectedFiles);
+        this.dispatchFilesEvent(selectedFiles);
+    }
+    private addFiles(newFiles: File[]): void {
+        const maxSizeInBytes = this.parseFileSize(this.maxFileSize);
+        const validFiles = newFiles.map((file) => {
+            if (!this.isFileTypeAllowed(file)) {
+                return { file, progress: 0, error: 'Invalid file type.' };
+            }
+            if (file.size > maxSizeInBytes) {
+                return { file, progress: 0, error: 'File size exceeds the limit.' };
+            }
+            return { file, progress: 0 };
+        });
+        this.files = [...this.files, ...validFiles];
+        setTimeout(() => this.forceReflow(), 0);
+        this.simulateUploadProgress(validFiles.filter((file) => !file.error));
+        this.dispatchFilesEvent(newFiles);
+    }
+    private dispatchFilesEvent(files: File[]): void {
+        const event = new CustomEvent('file-selected', {
+            detail: { files },
+            bubbles: false,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private isFileTypeAllowed(file: File): boolean {
+        return this.allowedFileTypes.includes(file.type);
+    }
+    private forceReflow(): void {
+        const progressElements = this.shadowRoot?.querySelectorAll('.progress');
+        progressElements?.forEach((el) => el.getBoundingClientRect());
+    }
+    private removeFile(index: number): void {
+        const removedFile = this.files[index];
+        this.files = this.files.filter((_, i) => i !== index);
+        const event = new CustomEvent('file-removed', {
+            detail: { removedFile },
+            bubbles: true,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private formatFileSize(size: number): string {
+        if (size < 1024) {
+            return `${size} bytes`;
+        }
+        else if (size < 1048576) {
+            return `${(size / 1024).toFixed(2)} KB`;
+        }
+        else {
+            return `${(size / 1048576).toFixed(2)} MB`;
+        }
+    }
+    private simulateUploadProgress(files: FileUploadProgress[]): void {
+        files.forEach((fileUpload) => {
+            const interval = setInterval(() => {
+                if (fileUpload.progress >= 100) {
+                    clearInterval(interval);
+                }
+                else {
+                    fileUpload.progress += 10;
+                    this.files = [...this.files];
+                }
+            }, 300);
+        });
+    }
+}
+
+```
+
+## disconnectedCallback
+`src/components/Input/File/File`
+
+**AST Node Type:** *MethodDeclaration*
+
+#### JSDoc annotations:
+
+Lifecycle hook called when the element is removed from the DOM.
+
+```bash
+
+```
+
+#### Code:
+
+```ts
+@customElement('tds-file-input')
+export class FileInput extends LitElement {
+    static get styles() {
+        return css `
+      ${unsafeCSS(customStyles)}
+    `;
+    }
+    @property({ type: Array })
+    files: FileUploadProgress[] = [];
+    @property({ type: Boolean })
+    isDragOver = false;
+    @property({ type: String })
+    maxFileSize = '2MB';
+    @property({ type: String })
+    iconName = 'upload';
+    @property({ type: String })
+    iconState = 'default';
+    @property({ type: String })
+    headingText = 'Drag & Drop or Choose file from device';
+    @property({ type: String })
+    secondaryText = 'Max file size';
+    @property({ type: String })
+    buttonText = 'Browse file';
+    @property({ type: Array })
+    allowedFileTypes: string[] = ['application/pdf'];
+    public clearFiles(): void {
+        this.files = [];
+    }
+    private mimeTypeToLabel = mimeTypeToLabel;
+    connectedCallback() {
+        super.connectedCallback();
+        document.addEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.addEventListener('clear-file-uploads', this.handleClearFiles);
+    }
+    disconnectedCallback() {
+        document.removeEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.removeEventListener('clear-file-uploads', this.handleClearFiles);
+        super.disconnectedCallback();
+    }
+    private handleClearFiles = (): void => {
+        this.clearFiles();
+    };
+    private handleFileError = (event: CustomEvent<{
+        fileName: string;
+        error: string;
+    }>) => {
+        const { fileName, error } = event.detail;
+        console.log('Handling error for file:', fileName, 'with error:', error);
+        this.files = this.files.map((fileUpload) => fileUpload.file.name === fileName ? { ...fileUpload, error } : fileUpload);
+    };
+    render(): TemplateResult {
+        return html `
+      <div class="file-input">
+        <div class="file-upload">
+          <label>Upload Template File</label>
+          <div
+            class=${classMap({ 'drop-area': true, dragover: this.isDragOver })}
+            @dragover="${this.handleDragOver}"
+            @dragenter="${this.handleDragEnter}"
+            @dragleave="${this.handleDragLeave}"
+            @drop="${this.handleDrop}"
+            @click="${this.handleClick}"
+          >
+            <tds-icon
+              name="${this.iconName}"
+              state="${this.iconState}"
+            ></tds-icon>
+            <div class="file-text">
+              <tds-heading as="h10">
+                <strong>${this.headingText}</strong>
+              </tds-heading>
+              <p class="extra-small">
+                ${this.formatAllowedFileTypes()}, ${this.secondaryText}
+                ${this.maxFileSize}.
+              </p>
+            </div>
+            <tds-button
+              type="button"
+              variant="filled"
+              theme="light"
+              label="Button"
+              color="teal"
+              compact
+            >
+              ${this.buttonText}
+            </tds-button>
+          </div>
+        </div>
+        ${this.files.length > 0
+            ? html `
+              <div class="file-list">
+                ${this.files.map((fileUpload, index) => html `
+                    <div class="file-item">
+                      <div class="file-progress">
+                        <div class="file-name">${fileUpload.file.name}</div>
+                        <div class="file-size">
+                          ${this.formatFileSize(fileUpload.file.size)}
+                        </div>
+                        <div class="progress-bar">
+                          <div
+                            class="progress ${fileUpload.error
+                ? 'progress-error'
+                : ''}"
+                            style="
+                              --progress-width: ${fileUpload.progress}%;
+                              background-color: ${fileUpload.error
+                ? '#cd163f'
+                : fileUpload.progress === 100
+                    ? '#4caf50'
+                    : '#F7B500'};
+                            "
+                          ></div>
+                          <span class="progress-percentage">
+                            ${fileUpload.error
+                ? '0%'
+                : `${fileUpload.progress}%`}
+                          </span>
+                        </div>
+                        ${fileUpload.error
+                ? html `<div class="error-message">
+                              ${fileUpload.error}
+                            </div>`
+                : ''}
+                      </div>
+                      <tds-file-close
+                        @click="${() => this.removeFile(index)}"
+                      ></tds-file-close>
+                    </div>
+                  `)}
+              </div>
+            `
+            : ''}
+      </div>
+    `;
+    }
+    private formatAllowedFileTypes(): string {
+        const types = this.allowedFileTypes || [];
+        return types.map((type) => this.mimeTypeToLabel[type] || type).join(', ');
+    }
+    private parseFileSize(size: string): number {
+        const units: Record<string, number> = {
+            B: 1,
+            KB: 1024,
+            MB: 1024 * 1024,
+            GB: 1024 * 1024 * 1024,
+        };
+        const match = size.match(/^(\d+(?:\.\d+)?)\s*(B|KB|MB|GB)$/i);
+        if (!match)
+            throw new Error('Invalid file size format');
+        const value = parseFloat(match[1]);
+        const unit = match[2].toUpperCase();
+        return value * (units[unit] || 1);
+    }
+    private handleDragOver(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    private handleDragEnter(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = true;
+    }
+    private handleDragLeave(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = false;
+    }
+    private handleDrop(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+        this.isDragOver = false;
+        const droppedFiles = Array.from(event.dataTransfer?.files || []);
+        this.addFiles(droppedFiles);
+        this.dispatchFilesEvent(droppedFiles);
+    }
+    private handleClick(): void {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.multiple = true;
+        fileInput.accept = this.allowedFileTypes.join(',');
+        fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+        fileInput.click();
+    }
+    private handleFileSelect(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        const selectedFiles = Array.from(input.files || []);
+        this.addFiles(selectedFiles);
+        this.dispatchFilesEvent(selectedFiles);
+    }
+    private addFiles(newFiles: File[]): void {
+        const maxSizeInBytes = this.parseFileSize(this.maxFileSize);
+        const validFiles = newFiles.map((file) => {
+            if (!this.isFileTypeAllowed(file)) {
+                return { file, progress: 0, error: 'Invalid file type.' };
+            }
+            if (file.size > maxSizeInBytes) {
+                return { file, progress: 0, error: 'File size exceeds the limit.' };
+            }
+            return { file, progress: 0 };
+        });
+        this.files = [...this.files, ...validFiles];
+        setTimeout(() => this.forceReflow(), 0);
+        this.simulateUploadProgress(validFiles.filter((file) => !file.error));
+        this.dispatchFilesEvent(newFiles);
+    }
+    private dispatchFilesEvent(files: File[]): void {
+        const event = new CustomEvent('file-selected', {
+            detail: { files },
+            bubbles: false,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private isFileTypeAllowed(file: File): boolean {
+        return this.allowedFileTypes.includes(file.type);
+    }
+    private forceReflow(): void {
+        const progressElements = this.shadowRoot?.querySelectorAll('.progress');
+        progressElements?.forEach((el) => el.getBoundingClientRect());
+    }
+    private removeFile(index: number): void {
+        const removedFile = this.files[index];
+        this.files = this.files.filter((_, i) => i !== index);
+        const event = new CustomEvent('file-removed', {
+            detail: { removedFile },
+            bubbles: true,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private formatFileSize(size: number): string {
+        if (size < 1024) {
+            return `${size} bytes`;
+        }
+        else if (size < 1048576) {
+            return `${(size / 1024).toFixed(2)} KB`;
+        }
+        else {
+            return `${(size / 1048576).toFixed(2)} MB`;
+        }
+    }
+    private simulateUploadProgress(files: FileUploadProgress[]): void {
+        files.forEach((fileUpload) => {
+            const interval = setInterval(() => {
+                if (fileUpload.progress >= 100) {
+                    clearInterval(interval);
+                }
+                else {
+                    fileUpload.progress += 10;
+                    this.files = [...this.files];
+                }
+            }, 300);
+        });
+    }
+}
+
+```
+
+## 
+**AST Node Type:** *PropertyDeclaration*
+
+#### JSDoc annotations:
+
+Event handler to clear all file uploads.
+
+```bash
+
+```
+
+#### Code:
+
+```ts
+handleClearFiles = (): void => {
+    this.clearFiles();
+};
+
+```
+
+## 
+**AST Node Type:** *PropertyDeclaration*
+
+#### JSDoc annotations:
+
+Handles the file-upload-error event by updating the error status of the specific file.
+
+```bash
+@param {CustomEvent} event - The event containing the file error details.
+```
+
+#### Code:
+
+```ts
+handleFileError = (event: CustomEvent<{
+    fileName: string;
+    error: string;
+}>) => {
+    const { fileName, error } = event.detail;
+    console.log('Handling error for file:', fileName, 'with error:', error);
+    this.files = this.files.map((fileUpload) => fileUpload.file.name === fileName ? { ...fileUpload, error } : fileUpload);
+};
+
+```
+
+## render
+`src/components/Input/File/File`
+
+**AST Node Type:** *MethodDeclaration*
+
+#### JSDoc annotations:
+
+Renders the HTML template for the component.
+
+```bash
+@returns {TemplateResult} - The rendered HTML template.
+```
+
+#### Code:
+
+```ts
+@customElement('tds-file-input')
+export class FileInput extends LitElement {
+    static get styles() {
+        return css `
+      ${unsafeCSS(customStyles)}
+    `;
+    }
+    @property({ type: Array })
+    files: FileUploadProgress[] = [];
+    @property({ type: Boolean })
+    isDragOver = false;
+    @property({ type: String })
+    maxFileSize = '2MB';
+    @property({ type: String })
+    iconName = 'upload';
+    @property({ type: String })
+    iconState = 'default';
+    @property({ type: String })
+    headingText = 'Drag & Drop or Choose file from device';
+    @property({ type: String })
+    secondaryText = 'Max file size';
+    @property({ type: String })
+    buttonText = 'Browse file';
+    @property({ type: Array })
+    allowedFileTypes: string[] = ['application/pdf'];
+    public clearFiles(): void {
+        this.files = [];
+    }
+    private mimeTypeToLabel = mimeTypeToLabel;
+    connectedCallback() {
+        super.connectedCallback();
+        document.addEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.addEventListener('clear-file-uploads', this.handleClearFiles);
+    }
+    disconnectedCallback() {
+        document.removeEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.removeEventListener('clear-file-uploads', this.handleClearFiles);
+        super.disconnectedCallback();
+    }
+    private handleClearFiles = (): void => {
+        this.clearFiles();
+    };
+    private handleFileError = (event: CustomEvent<{
+        fileName: string;
+        error: string;
+    }>) => {
+        const { fileName, error } = event.detail;
+        console.log('Handling error for file:', fileName, 'with error:', error);
+        this.files = this.files.map((fileUpload) => fileUpload.file.name === fileName ? { ...fileUpload, error } : fileUpload);
+    };
+    render(): TemplateResult {
+        return html `
+      <div class="file-input">
+        <div class="file-upload">
+          <label>Upload Template File</label>
+          <div
+            class=${classMap({ 'drop-area': true, dragover: this.isDragOver })}
+            @dragover="${this.handleDragOver}"
+            @dragenter="${this.handleDragEnter}"
+            @dragleave="${this.handleDragLeave}"
+            @drop="${this.handleDrop}"
+            @click="${this.handleClick}"
+          >
+            <tds-icon
+              name="${this.iconName}"
+              state="${this.iconState}"
+            ></tds-icon>
+            <div class="file-text">
+              <tds-heading as="h10">
+                <strong>${this.headingText}</strong>
+              </tds-heading>
+              <p class="extra-small">
+                ${this.formatAllowedFileTypes()}, ${this.secondaryText}
+                ${this.maxFileSize}.
+              </p>
+            </div>
+            <tds-button
+              type="button"
+              variant="filled"
+              theme="light"
+              label="Button"
+              color="teal"
+              compact
+            >
+              ${this.buttonText}
+            </tds-button>
+          </div>
+        </div>
+        ${this.files.length > 0
+            ? html `
+              <div class="file-list">
+                ${this.files.map((fileUpload, index) => html `
+                    <div class="file-item">
+                      <div class="file-progress">
+                        <div class="file-name">${fileUpload.file.name}</div>
+                        <div class="file-size">
+                          ${this.formatFileSize(fileUpload.file.size)}
+                        </div>
+                        <div class="progress-bar">
+                          <div
+                            class="progress ${fileUpload.error
+                ? 'progress-error'
+                : ''}"
+                            style="
+                              --progress-width: ${fileUpload.progress}%;
+                              background-color: ${fileUpload.error
+                ? '#cd163f'
+                : fileUpload.progress === 100
+                    ? '#4caf50'
+                    : '#F7B500'};
+                            "
+                          ></div>
+                          <span class="progress-percentage">
+                            ${fileUpload.error
+                ? '0%'
+                : `${fileUpload.progress}%`}
+                          </span>
+                        </div>
+                        ${fileUpload.error
+                ? html `<div class="error-message">
+                              ${fileUpload.error}
+                            </div>`
+                : ''}
+                      </div>
+                      <tds-file-close
+                        @click="${() => this.removeFile(index)}"
+                      ></tds-file-close>
+                    </div>
+                  `)}
+              </div>
+            `
+            : ''}
+      </div>
+    `;
+    }
+    private formatAllowedFileTypes(): string {
+        const types = this.allowedFileTypes || [];
+        return types.map((type) => this.mimeTypeToLabel[type] || type).join(', ');
+    }
+    private parseFileSize(size: string): number {
+        const units: Record<string, number> = {
+            B: 1,
+            KB: 1024,
+            MB: 1024 * 1024,
+            GB: 1024 * 1024 * 1024,
+        };
+        const match = size.match(/^(\d+(?:\.\d+)?)\s*(B|KB|MB|GB)$/i);
+        if (!match)
+            throw new Error('Invalid file size format');
+        const value = parseFloat(match[1]);
+        const unit = match[2].toUpperCase();
+        return value * (units[unit] || 1);
+    }
+    private handleDragOver(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    private handleDragEnter(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = true;
+    }
+    private handleDragLeave(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = false;
+    }
+    private handleDrop(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+        this.isDragOver = false;
+        const droppedFiles = Array.from(event.dataTransfer?.files || []);
+        this.addFiles(droppedFiles);
+        this.dispatchFilesEvent(droppedFiles);
+    }
+    private handleClick(): void {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.multiple = true;
+        fileInput.accept = this.allowedFileTypes.join(',');
+        fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+        fileInput.click();
+    }
+    private handleFileSelect(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        const selectedFiles = Array.from(input.files || []);
+        this.addFiles(selectedFiles);
+        this.dispatchFilesEvent(selectedFiles);
+    }
+    private addFiles(newFiles: File[]): void {
+        const maxSizeInBytes = this.parseFileSize(this.maxFileSize);
+        const validFiles = newFiles.map((file) => {
+            if (!this.isFileTypeAllowed(file)) {
+                return { file, progress: 0, error: 'Invalid file type.' };
+            }
+            if (file.size > maxSizeInBytes) {
+                return { file, progress: 0, error: 'File size exceeds the limit.' };
+            }
+            return { file, progress: 0 };
+        });
+        this.files = [...this.files, ...validFiles];
+        setTimeout(() => this.forceReflow(), 0);
+        this.simulateUploadProgress(validFiles.filter((file) => !file.error));
+        this.dispatchFilesEvent(newFiles);
+    }
+    private dispatchFilesEvent(files: File[]): void {
+        const event = new CustomEvent('file-selected', {
+            detail: { files },
+            bubbles: false,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private isFileTypeAllowed(file: File): boolean {
+        return this.allowedFileTypes.includes(file.type);
+    }
+    private forceReflow(): void {
+        const progressElements = this.shadowRoot?.querySelectorAll('.progress');
+        progressElements?.forEach((el) => el.getBoundingClientRect());
+    }
+    private removeFile(index: number): void {
+        const removedFile = this.files[index];
+        this.files = this.files.filter((_, i) => i !== index);
+        const event = new CustomEvent('file-removed', {
+            detail: { removedFile },
+            bubbles: true,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private formatFileSize(size: number): string {
+        if (size < 1024) {
+            return `${size} bytes`;
+        }
+        else if (size < 1048576) {
+            return `${(size / 1024).toFixed(2)} KB`;
+        }
+        else {
+            return `${(size / 1048576).toFixed(2)} MB`;
+        }
+    }
+    private simulateUploadProgress(files: FileUploadProgress[]): void {
+        files.forEach((fileUpload) => {
+            const interval = setInterval(() => {
+                if (fileUpload.progress >= 100) {
+                    clearInterval(interval);
+                }
+                else {
+                    fileUpload.progress += 10;
+                    this.files = [...this.files];
+                }
+            }, 300);
+        });
+    }
+}
+
+```
+
+## formatAllowedFileTypes
+`src/components/Input/File/File`
+
+**AST Node Type:** *MethodDeclaration*
+
+#### JSDoc annotations:
+
+Formats the allowed file types for display.
+
+```bash
+@returns {string} - The formatted list of allowed file types.
+```
+
+#### Code:
+
+```ts
+@customElement('tds-file-input')
+export class FileInput extends LitElement {
+    static get styles() {
+        return css `
+      ${unsafeCSS(customStyles)}
+    `;
+    }
+    @property({ type: Array })
+    files: FileUploadProgress[] = [];
+    @property({ type: Boolean })
+    isDragOver = false;
+    @property({ type: String })
+    maxFileSize = '2MB';
+    @property({ type: String })
+    iconName = 'upload';
+    @property({ type: String })
+    iconState = 'default';
+    @property({ type: String })
+    headingText = 'Drag & Drop or Choose file from device';
+    @property({ type: String })
+    secondaryText = 'Max file size';
+    @property({ type: String })
+    buttonText = 'Browse file';
+    @property({ type: Array })
+    allowedFileTypes: string[] = ['application/pdf'];
+    public clearFiles(): void {
+        this.files = [];
+    }
+    private mimeTypeToLabel = mimeTypeToLabel;
+    connectedCallback() {
+        super.connectedCallback();
+        document.addEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.addEventListener('clear-file-uploads', this.handleClearFiles);
+    }
+    disconnectedCallback() {
+        document.removeEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.removeEventListener('clear-file-uploads', this.handleClearFiles);
+        super.disconnectedCallback();
+    }
+    private handleClearFiles = (): void => {
+        this.clearFiles();
+    };
+    private handleFileError = (event: CustomEvent<{
+        fileName: string;
+        error: string;
+    }>) => {
+        const { fileName, error } = event.detail;
+        console.log('Handling error for file:', fileName, 'with error:', error);
+        this.files = this.files.map((fileUpload) => fileUpload.file.name === fileName ? { ...fileUpload, error } : fileUpload);
+    };
+    render(): TemplateResult {
+        return html `
+      <div class="file-input">
+        <div class="file-upload">
+          <label>Upload Template File</label>
+          <div
+            class=${classMap({ 'drop-area': true, dragover: this.isDragOver })}
+            @dragover="${this.handleDragOver}"
+            @dragenter="${this.handleDragEnter}"
+            @dragleave="${this.handleDragLeave}"
+            @drop="${this.handleDrop}"
+            @click="${this.handleClick}"
+          >
+            <tds-icon
+              name="${this.iconName}"
+              state="${this.iconState}"
+            ></tds-icon>
+            <div class="file-text">
+              <tds-heading as="h10">
+                <strong>${this.headingText}</strong>
+              </tds-heading>
+              <p class="extra-small">
+                ${this.formatAllowedFileTypes()}, ${this.secondaryText}
+                ${this.maxFileSize}.
+              </p>
+            </div>
+            <tds-button
+              type="button"
+              variant="filled"
+              theme="light"
+              label="Button"
+              color="teal"
+              compact
+            >
+              ${this.buttonText}
+            </tds-button>
+          </div>
+        </div>
+        ${this.files.length > 0
+            ? html `
+              <div class="file-list">
+                ${this.files.map((fileUpload, index) => html `
+                    <div class="file-item">
+                      <div class="file-progress">
+                        <div class="file-name">${fileUpload.file.name}</div>
+                        <div class="file-size">
+                          ${this.formatFileSize(fileUpload.file.size)}
+                        </div>
+                        <div class="progress-bar">
+                          <div
+                            class="progress ${fileUpload.error
+                ? 'progress-error'
+                : ''}"
+                            style="
+                              --progress-width: ${fileUpload.progress}%;
+                              background-color: ${fileUpload.error
+                ? '#cd163f'
+                : fileUpload.progress === 100
+                    ? '#4caf50'
+                    : '#F7B500'};
+                            "
+                          ></div>
+                          <span class="progress-percentage">
+                            ${fileUpload.error
+                ? '0%'
+                : `${fileUpload.progress}%`}
+                          </span>
+                        </div>
+                        ${fileUpload.error
+                ? html `<div class="error-message">
+                              ${fileUpload.error}
+                            </div>`
+                : ''}
+                      </div>
+                      <tds-file-close
+                        @click="${() => this.removeFile(index)}"
+                      ></tds-file-close>
+                    </div>
+                  `)}
+              </div>
+            `
+            : ''}
+      </div>
+    `;
+    }
+    private formatAllowedFileTypes(): string {
+        const types = this.allowedFileTypes || [];
+        return types.map((type) => this.mimeTypeToLabel[type] || type).join(', ');
+    }
+    private parseFileSize(size: string): number {
+        const units: Record<string, number> = {
+            B: 1,
+            KB: 1024,
+            MB: 1024 * 1024,
+            GB: 1024 * 1024 * 1024,
+        };
+        const match = size.match(/^(\d+(?:\.\d+)?)\s*(B|KB|MB|GB)$/i);
+        if (!match)
+            throw new Error('Invalid file size format');
+        const value = parseFloat(match[1]);
+        const unit = match[2].toUpperCase();
+        return value * (units[unit] || 1);
+    }
+    private handleDragOver(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    private handleDragEnter(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = true;
+    }
+    private handleDragLeave(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = false;
+    }
+    private handleDrop(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+        this.isDragOver = false;
+        const droppedFiles = Array.from(event.dataTransfer?.files || []);
+        this.addFiles(droppedFiles);
+        this.dispatchFilesEvent(droppedFiles);
+    }
+    private handleClick(): void {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.multiple = true;
+        fileInput.accept = this.allowedFileTypes.join(',');
+        fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+        fileInput.click();
+    }
+    private handleFileSelect(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        const selectedFiles = Array.from(input.files || []);
+        this.addFiles(selectedFiles);
+        this.dispatchFilesEvent(selectedFiles);
+    }
+    private addFiles(newFiles: File[]): void {
+        const maxSizeInBytes = this.parseFileSize(this.maxFileSize);
+        const validFiles = newFiles.map((file) => {
+            if (!this.isFileTypeAllowed(file)) {
+                return { file, progress: 0, error: 'Invalid file type.' };
+            }
+            if (file.size > maxSizeInBytes) {
+                return { file, progress: 0, error: 'File size exceeds the limit.' };
+            }
+            return { file, progress: 0 };
+        });
+        this.files = [...this.files, ...validFiles];
+        setTimeout(() => this.forceReflow(), 0);
+        this.simulateUploadProgress(validFiles.filter((file) => !file.error));
+        this.dispatchFilesEvent(newFiles);
+    }
+    private dispatchFilesEvent(files: File[]): void {
+        const event = new CustomEvent('file-selected', {
+            detail: { files },
+            bubbles: false,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private isFileTypeAllowed(file: File): boolean {
+        return this.allowedFileTypes.includes(file.type);
+    }
+    private forceReflow(): void {
+        const progressElements = this.shadowRoot?.querySelectorAll('.progress');
+        progressElements?.forEach((el) => el.getBoundingClientRect());
+    }
+    private removeFile(index: number): void {
+        const removedFile = this.files[index];
+        this.files = this.files.filter((_, i) => i !== index);
+        const event = new CustomEvent('file-removed', {
+            detail: { removedFile },
+            bubbles: true,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private formatFileSize(size: number): string {
+        if (size < 1024) {
+            return `${size} bytes`;
+        }
+        else if (size < 1048576) {
+            return `${(size / 1024).toFixed(2)} KB`;
+        }
+        else {
+            return `${(size / 1048576).toFixed(2)} MB`;
+        }
+    }
+    private simulateUploadProgress(files: FileUploadProgress[]): void {
+        files.forEach((fileUpload) => {
+            const interval = setInterval(() => {
+                if (fileUpload.progress >= 100) {
+                    clearInterval(interval);
+                }
+                else {
+                    fileUpload.progress += 10;
+                    this.files = [...this.files];
+                }
+            }, 300);
+        });
+    }
+}
+
+```
+
+## parseFileSize
+`src/components/Input/File/File`
+
+**AST Node Type:** *MethodDeclaration*
+
+#### JSDoc annotations:
+
+Parses the file size from a string to a number of bytes.
+
+```bash
+@param {string} size - File size as a string (e.g., '2MB').
+
+@returns {number} - The parsed file size in bytes.
+```
+
+#### Code:
+
+```ts
+@customElement('tds-file-input')
+export class FileInput extends LitElement {
+    static get styles() {
+        return css `
+      ${unsafeCSS(customStyles)}
+    `;
+    }
+    @property({ type: Array })
+    files: FileUploadProgress[] = [];
+    @property({ type: Boolean })
+    isDragOver = false;
+    @property({ type: String })
+    maxFileSize = '2MB';
+    @property({ type: String })
+    iconName = 'upload';
+    @property({ type: String })
+    iconState = 'default';
+    @property({ type: String })
+    headingText = 'Drag & Drop or Choose file from device';
+    @property({ type: String })
+    secondaryText = 'Max file size';
+    @property({ type: String })
+    buttonText = 'Browse file';
+    @property({ type: Array })
+    allowedFileTypes: string[] = ['application/pdf'];
+    public clearFiles(): void {
+        this.files = [];
+    }
+    private mimeTypeToLabel = mimeTypeToLabel;
+    connectedCallback() {
+        super.connectedCallback();
+        document.addEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.addEventListener('clear-file-uploads', this.handleClearFiles);
+    }
+    disconnectedCallback() {
+        document.removeEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.removeEventListener('clear-file-uploads', this.handleClearFiles);
+        super.disconnectedCallback();
+    }
+    private handleClearFiles = (): void => {
+        this.clearFiles();
+    };
+    private handleFileError = (event: CustomEvent<{
+        fileName: string;
+        error: string;
+    }>) => {
+        const { fileName, error } = event.detail;
+        console.log('Handling error for file:', fileName, 'with error:', error);
+        this.files = this.files.map((fileUpload) => fileUpload.file.name === fileName ? { ...fileUpload, error } : fileUpload);
+    };
+    render(): TemplateResult {
+        return html `
+      <div class="file-input">
+        <div class="file-upload">
+          <label>Upload Template File</label>
+          <div
+            class=${classMap({ 'drop-area': true, dragover: this.isDragOver })}
+            @dragover="${this.handleDragOver}"
+            @dragenter="${this.handleDragEnter}"
+            @dragleave="${this.handleDragLeave}"
+            @drop="${this.handleDrop}"
+            @click="${this.handleClick}"
+          >
+            <tds-icon
+              name="${this.iconName}"
+              state="${this.iconState}"
+            ></tds-icon>
+            <div class="file-text">
+              <tds-heading as="h10">
+                <strong>${this.headingText}</strong>
+              </tds-heading>
+              <p class="extra-small">
+                ${this.formatAllowedFileTypes()}, ${this.secondaryText}
+                ${this.maxFileSize}.
+              </p>
+            </div>
+            <tds-button
+              type="button"
+              variant="filled"
+              theme="light"
+              label="Button"
+              color="teal"
+              compact
+            >
+              ${this.buttonText}
+            </tds-button>
+          </div>
+        </div>
+        ${this.files.length > 0
+            ? html `
+              <div class="file-list">
+                ${this.files.map((fileUpload, index) => html `
+                    <div class="file-item">
+                      <div class="file-progress">
+                        <div class="file-name">${fileUpload.file.name}</div>
+                        <div class="file-size">
+                          ${this.formatFileSize(fileUpload.file.size)}
+                        </div>
+                        <div class="progress-bar">
+                          <div
+                            class="progress ${fileUpload.error
+                ? 'progress-error'
+                : ''}"
+                            style="
+                              --progress-width: ${fileUpload.progress}%;
+                              background-color: ${fileUpload.error
+                ? '#cd163f'
+                : fileUpload.progress === 100
+                    ? '#4caf50'
+                    : '#F7B500'};
+                            "
+                          ></div>
+                          <span class="progress-percentage">
+                            ${fileUpload.error
+                ? '0%'
+                : `${fileUpload.progress}%`}
+                          </span>
+                        </div>
+                        ${fileUpload.error
+                ? html `<div class="error-message">
+                              ${fileUpload.error}
+                            </div>`
+                : ''}
+                      </div>
+                      <tds-file-close
+                        @click="${() => this.removeFile(index)}"
+                      ></tds-file-close>
+                    </div>
+                  `)}
+              </div>
+            `
+            : ''}
+      </div>
+    `;
+    }
+    private formatAllowedFileTypes(): string {
+        const types = this.allowedFileTypes || [];
+        return types.map((type) => this.mimeTypeToLabel[type] || type).join(', ');
+    }
+    private parseFileSize(size: string): number {
+        const units: Record<string, number> = {
+            B: 1,
+            KB: 1024,
+            MB: 1024 * 1024,
+            GB: 1024 * 1024 * 1024,
+        };
+        const match = size.match(/^(\d+(?:\.\d+)?)\s*(B|KB|MB|GB)$/i);
+        if (!match)
+            throw new Error('Invalid file size format');
+        const value = parseFloat(match[1]);
+        const unit = match[2].toUpperCase();
+        return value * (units[unit] || 1);
+    }
+    private handleDragOver(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    private handleDragEnter(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = true;
+    }
+    private handleDragLeave(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = false;
+    }
+    private handleDrop(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+        this.isDragOver = false;
+        const droppedFiles = Array.from(event.dataTransfer?.files || []);
+        this.addFiles(droppedFiles);
+        this.dispatchFilesEvent(droppedFiles);
+    }
+    private handleClick(): void {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.multiple = true;
+        fileInput.accept = this.allowedFileTypes.join(',');
+        fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+        fileInput.click();
+    }
+    private handleFileSelect(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        const selectedFiles = Array.from(input.files || []);
+        this.addFiles(selectedFiles);
+        this.dispatchFilesEvent(selectedFiles);
+    }
+    private addFiles(newFiles: File[]): void {
+        const maxSizeInBytes = this.parseFileSize(this.maxFileSize);
+        const validFiles = newFiles.map((file) => {
+            if (!this.isFileTypeAllowed(file)) {
+                return { file, progress: 0, error: 'Invalid file type.' };
+            }
+            if (file.size > maxSizeInBytes) {
+                return { file, progress: 0, error: 'File size exceeds the limit.' };
+            }
+            return { file, progress: 0 };
+        });
+        this.files = [...this.files, ...validFiles];
+        setTimeout(() => this.forceReflow(), 0);
+        this.simulateUploadProgress(validFiles.filter((file) => !file.error));
+        this.dispatchFilesEvent(newFiles);
+    }
+    private dispatchFilesEvent(files: File[]): void {
+        const event = new CustomEvent('file-selected', {
+            detail: { files },
+            bubbles: false,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private isFileTypeAllowed(file: File): boolean {
+        return this.allowedFileTypes.includes(file.type);
+    }
+    private forceReflow(): void {
+        const progressElements = this.shadowRoot?.querySelectorAll('.progress');
+        progressElements?.forEach((el) => el.getBoundingClientRect());
+    }
+    private removeFile(index: number): void {
+        const removedFile = this.files[index];
+        this.files = this.files.filter((_, i) => i !== index);
+        const event = new CustomEvent('file-removed', {
+            detail: { removedFile },
+            bubbles: true,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private formatFileSize(size: number): string {
+        if (size < 1024) {
+            return `${size} bytes`;
+        }
+        else if (size < 1048576) {
+            return `${(size / 1024).toFixed(2)} KB`;
+        }
+        else {
+            return `${(size / 1048576).toFixed(2)} MB`;
+        }
+    }
+    private simulateUploadProgress(files: FileUploadProgress[]): void {
+        files.forEach((fileUpload) => {
+            const interval = setInterval(() => {
+                if (fileUpload.progress >= 100) {
+                    clearInterval(interval);
+                }
+                else {
+                    fileUpload.progress += 10;
+                    this.files = [...this.files];
+                }
+            }, 300);
+        });
+    }
+}
+
+```
+
+## handleDragOver
+`src/components/Input/File/File`
+
+**AST Node Type:** *MethodDeclaration*
+
+#### JSDoc annotations:
+
+Handles the dragover event to allow file drop.
+
+```bash
+@param {DragEvent} event - The dragover event.
+```
+
+#### Code:
+
+```ts
+@customElement('tds-file-input')
+export class FileInput extends LitElement {
+    static get styles() {
+        return css `
+      ${unsafeCSS(customStyles)}
+    `;
+    }
+    @property({ type: Array })
+    files: FileUploadProgress[] = [];
+    @property({ type: Boolean })
+    isDragOver = false;
+    @property({ type: String })
+    maxFileSize = '2MB';
+    @property({ type: String })
+    iconName = 'upload';
+    @property({ type: String })
+    iconState = 'default';
+    @property({ type: String })
+    headingText = 'Drag & Drop or Choose file from device';
+    @property({ type: String })
+    secondaryText = 'Max file size';
+    @property({ type: String })
+    buttonText = 'Browse file';
+    @property({ type: Array })
+    allowedFileTypes: string[] = ['application/pdf'];
+    public clearFiles(): void {
+        this.files = [];
+    }
+    private mimeTypeToLabel = mimeTypeToLabel;
+    connectedCallback() {
+        super.connectedCallback();
+        document.addEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.addEventListener('clear-file-uploads', this.handleClearFiles);
+    }
+    disconnectedCallback() {
+        document.removeEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.removeEventListener('clear-file-uploads', this.handleClearFiles);
+        super.disconnectedCallback();
+    }
+    private handleClearFiles = (): void => {
+        this.clearFiles();
+    };
+    private handleFileError = (event: CustomEvent<{
+        fileName: string;
+        error: string;
+    }>) => {
+        const { fileName, error } = event.detail;
+        console.log('Handling error for file:', fileName, 'with error:', error);
+        this.files = this.files.map((fileUpload) => fileUpload.file.name === fileName ? { ...fileUpload, error } : fileUpload);
+    };
+    render(): TemplateResult {
+        return html `
+      <div class="file-input">
+        <div class="file-upload">
+          <label>Upload Template File</label>
+          <div
+            class=${classMap({ 'drop-area': true, dragover: this.isDragOver })}
+            @dragover="${this.handleDragOver}"
+            @dragenter="${this.handleDragEnter}"
+            @dragleave="${this.handleDragLeave}"
+            @drop="${this.handleDrop}"
+            @click="${this.handleClick}"
+          >
+            <tds-icon
+              name="${this.iconName}"
+              state="${this.iconState}"
+            ></tds-icon>
+            <div class="file-text">
+              <tds-heading as="h10">
+                <strong>${this.headingText}</strong>
+              </tds-heading>
+              <p class="extra-small">
+                ${this.formatAllowedFileTypes()}, ${this.secondaryText}
+                ${this.maxFileSize}.
+              </p>
+            </div>
+            <tds-button
+              type="button"
+              variant="filled"
+              theme="light"
+              label="Button"
+              color="teal"
+              compact
+            >
+              ${this.buttonText}
+            </tds-button>
+          </div>
+        </div>
+        ${this.files.length > 0
+            ? html `
+              <div class="file-list">
+                ${this.files.map((fileUpload, index) => html `
+                    <div class="file-item">
+                      <div class="file-progress">
+                        <div class="file-name">${fileUpload.file.name}</div>
+                        <div class="file-size">
+                          ${this.formatFileSize(fileUpload.file.size)}
+                        </div>
+                        <div class="progress-bar">
+                          <div
+                            class="progress ${fileUpload.error
+                ? 'progress-error'
+                : ''}"
+                            style="
+                              --progress-width: ${fileUpload.progress}%;
+                              background-color: ${fileUpload.error
+                ? '#cd163f'
+                : fileUpload.progress === 100
+                    ? '#4caf50'
+                    : '#F7B500'};
+                            "
+                          ></div>
+                          <span class="progress-percentage">
+                            ${fileUpload.error
+                ? '0%'
+                : `${fileUpload.progress}%`}
+                          </span>
+                        </div>
+                        ${fileUpload.error
+                ? html `<div class="error-message">
+                              ${fileUpload.error}
+                            </div>`
+                : ''}
+                      </div>
+                      <tds-file-close
+                        @click="${() => this.removeFile(index)}"
+                      ></tds-file-close>
+                    </div>
+                  `)}
+              </div>
+            `
+            : ''}
+      </div>
+    `;
+    }
+    private formatAllowedFileTypes(): string {
+        const types = this.allowedFileTypes || [];
+        return types.map((type) => this.mimeTypeToLabel[type] || type).join(', ');
+    }
+    private parseFileSize(size: string): number {
+        const units: Record<string, number> = {
+            B: 1,
+            KB: 1024,
+            MB: 1024 * 1024,
+            GB: 1024 * 1024 * 1024,
+        };
+        const match = size.match(/^(\d+(?:\.\d+)?)\s*(B|KB|MB|GB)$/i);
+        if (!match)
+            throw new Error('Invalid file size format');
+        const value = parseFloat(match[1]);
+        const unit = match[2].toUpperCase();
+        return value * (units[unit] || 1);
+    }
+    private handleDragOver(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    private handleDragEnter(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = true;
+    }
+    private handleDragLeave(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = false;
+    }
+    private handleDrop(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+        this.isDragOver = false;
+        const droppedFiles = Array.from(event.dataTransfer?.files || []);
+        this.addFiles(droppedFiles);
+        this.dispatchFilesEvent(droppedFiles);
+    }
+    private handleClick(): void {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.multiple = true;
+        fileInput.accept = this.allowedFileTypes.join(',');
+        fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+        fileInput.click();
+    }
+    private handleFileSelect(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        const selectedFiles = Array.from(input.files || []);
+        this.addFiles(selectedFiles);
+        this.dispatchFilesEvent(selectedFiles);
+    }
+    private addFiles(newFiles: File[]): void {
+        const maxSizeInBytes = this.parseFileSize(this.maxFileSize);
+        const validFiles = newFiles.map((file) => {
+            if (!this.isFileTypeAllowed(file)) {
+                return { file, progress: 0, error: 'Invalid file type.' };
+            }
+            if (file.size > maxSizeInBytes) {
+                return { file, progress: 0, error: 'File size exceeds the limit.' };
+            }
+            return { file, progress: 0 };
+        });
+        this.files = [...this.files, ...validFiles];
+        setTimeout(() => this.forceReflow(), 0);
+        this.simulateUploadProgress(validFiles.filter((file) => !file.error));
+        this.dispatchFilesEvent(newFiles);
+    }
+    private dispatchFilesEvent(files: File[]): void {
+        const event = new CustomEvent('file-selected', {
+            detail: { files },
+            bubbles: false,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private isFileTypeAllowed(file: File): boolean {
+        return this.allowedFileTypes.includes(file.type);
+    }
+    private forceReflow(): void {
+        const progressElements = this.shadowRoot?.querySelectorAll('.progress');
+        progressElements?.forEach((el) => el.getBoundingClientRect());
+    }
+    private removeFile(index: number): void {
+        const removedFile = this.files[index];
+        this.files = this.files.filter((_, i) => i !== index);
+        const event = new CustomEvent('file-removed', {
+            detail: { removedFile },
+            bubbles: true,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private formatFileSize(size: number): string {
+        if (size < 1024) {
+            return `${size} bytes`;
+        }
+        else if (size < 1048576) {
+            return `${(size / 1024).toFixed(2)} KB`;
+        }
+        else {
+            return `${(size / 1048576).toFixed(2)} MB`;
+        }
+    }
+    private simulateUploadProgress(files: FileUploadProgress[]): void {
+        files.forEach((fileUpload) => {
+            const interval = setInterval(() => {
+                if (fileUpload.progress >= 100) {
+                    clearInterval(interval);
+                }
+                else {
+                    fileUpload.progress += 10;
+                    this.files = [...this.files];
+                }
+            }, 300);
+        });
+    }
+}
+
+```
+
+## handleDragEnter
+`src/components/Input/File/File`
+
+**AST Node Type:** *MethodDeclaration*
+
+#### JSDoc annotations:
+
+Handles the dragenter event when a file enters the drop area.
+
+```bash
+@param {DragEvent} event - The dragenter event.
+```
+
+#### Code:
+
+```ts
+@customElement('tds-file-input')
+export class FileInput extends LitElement {
+    static get styles() {
+        return css `
+      ${unsafeCSS(customStyles)}
+    `;
+    }
+    @property({ type: Array })
+    files: FileUploadProgress[] = [];
+    @property({ type: Boolean })
+    isDragOver = false;
+    @property({ type: String })
+    maxFileSize = '2MB';
+    @property({ type: String })
+    iconName = 'upload';
+    @property({ type: String })
+    iconState = 'default';
+    @property({ type: String })
+    headingText = 'Drag & Drop or Choose file from device';
+    @property({ type: String })
+    secondaryText = 'Max file size';
+    @property({ type: String })
+    buttonText = 'Browse file';
+    @property({ type: Array })
+    allowedFileTypes: string[] = ['application/pdf'];
+    public clearFiles(): void {
+        this.files = [];
+    }
+    private mimeTypeToLabel = mimeTypeToLabel;
+    connectedCallback() {
+        super.connectedCallback();
+        document.addEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.addEventListener('clear-file-uploads', this.handleClearFiles);
+    }
+    disconnectedCallback() {
+        document.removeEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.removeEventListener('clear-file-uploads', this.handleClearFiles);
+        super.disconnectedCallback();
+    }
+    private handleClearFiles = (): void => {
+        this.clearFiles();
+    };
+    private handleFileError = (event: CustomEvent<{
+        fileName: string;
+        error: string;
+    }>) => {
+        const { fileName, error } = event.detail;
+        console.log('Handling error for file:', fileName, 'with error:', error);
+        this.files = this.files.map((fileUpload) => fileUpload.file.name === fileName ? { ...fileUpload, error } : fileUpload);
+    };
+    render(): TemplateResult {
+        return html `
+      <div class="file-input">
+        <div class="file-upload">
+          <label>Upload Template File</label>
+          <div
+            class=${classMap({ 'drop-area': true, dragover: this.isDragOver })}
+            @dragover="${this.handleDragOver}"
+            @dragenter="${this.handleDragEnter}"
+            @dragleave="${this.handleDragLeave}"
+            @drop="${this.handleDrop}"
+            @click="${this.handleClick}"
+          >
+            <tds-icon
+              name="${this.iconName}"
+              state="${this.iconState}"
+            ></tds-icon>
+            <div class="file-text">
+              <tds-heading as="h10">
+                <strong>${this.headingText}</strong>
+              </tds-heading>
+              <p class="extra-small">
+                ${this.formatAllowedFileTypes()}, ${this.secondaryText}
+                ${this.maxFileSize}.
+              </p>
+            </div>
+            <tds-button
+              type="button"
+              variant="filled"
+              theme="light"
+              label="Button"
+              color="teal"
+              compact
+            >
+              ${this.buttonText}
+            </tds-button>
+          </div>
+        </div>
+        ${this.files.length > 0
+            ? html `
+              <div class="file-list">
+                ${this.files.map((fileUpload, index) => html `
+                    <div class="file-item">
+                      <div class="file-progress">
+                        <div class="file-name">${fileUpload.file.name}</div>
+                        <div class="file-size">
+                          ${this.formatFileSize(fileUpload.file.size)}
+                        </div>
+                        <div class="progress-bar">
+                          <div
+                            class="progress ${fileUpload.error
+                ? 'progress-error'
+                : ''}"
+                            style="
+                              --progress-width: ${fileUpload.progress}%;
+                              background-color: ${fileUpload.error
+                ? '#cd163f'
+                : fileUpload.progress === 100
+                    ? '#4caf50'
+                    : '#F7B500'};
+                            "
+                          ></div>
+                          <span class="progress-percentage">
+                            ${fileUpload.error
+                ? '0%'
+                : `${fileUpload.progress}%`}
+                          </span>
+                        </div>
+                        ${fileUpload.error
+                ? html `<div class="error-message">
+                              ${fileUpload.error}
+                            </div>`
+                : ''}
+                      </div>
+                      <tds-file-close
+                        @click="${() => this.removeFile(index)}"
+                      ></tds-file-close>
+                    </div>
+                  `)}
+              </div>
+            `
+            : ''}
+      </div>
+    `;
+    }
+    private formatAllowedFileTypes(): string {
+        const types = this.allowedFileTypes || [];
+        return types.map((type) => this.mimeTypeToLabel[type] || type).join(', ');
+    }
+    private parseFileSize(size: string): number {
+        const units: Record<string, number> = {
+            B: 1,
+            KB: 1024,
+            MB: 1024 * 1024,
+            GB: 1024 * 1024 * 1024,
+        };
+        const match = size.match(/^(\d+(?:\.\d+)?)\s*(B|KB|MB|GB)$/i);
+        if (!match)
+            throw new Error('Invalid file size format');
+        const value = parseFloat(match[1]);
+        const unit = match[2].toUpperCase();
+        return value * (units[unit] || 1);
+    }
+    private handleDragOver(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    private handleDragEnter(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = true;
+    }
+    private handleDragLeave(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = false;
+    }
+    private handleDrop(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+        this.isDragOver = false;
+        const droppedFiles = Array.from(event.dataTransfer?.files || []);
+        this.addFiles(droppedFiles);
+        this.dispatchFilesEvent(droppedFiles);
+    }
+    private handleClick(): void {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.multiple = true;
+        fileInput.accept = this.allowedFileTypes.join(',');
+        fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+        fileInput.click();
+    }
+    private handleFileSelect(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        const selectedFiles = Array.from(input.files || []);
+        this.addFiles(selectedFiles);
+        this.dispatchFilesEvent(selectedFiles);
+    }
+    private addFiles(newFiles: File[]): void {
+        const maxSizeInBytes = this.parseFileSize(this.maxFileSize);
+        const validFiles = newFiles.map((file) => {
+            if (!this.isFileTypeAllowed(file)) {
+                return { file, progress: 0, error: 'Invalid file type.' };
+            }
+            if (file.size > maxSizeInBytes) {
+                return { file, progress: 0, error: 'File size exceeds the limit.' };
+            }
+            return { file, progress: 0 };
+        });
+        this.files = [...this.files, ...validFiles];
+        setTimeout(() => this.forceReflow(), 0);
+        this.simulateUploadProgress(validFiles.filter((file) => !file.error));
+        this.dispatchFilesEvent(newFiles);
+    }
+    private dispatchFilesEvent(files: File[]): void {
+        const event = new CustomEvent('file-selected', {
+            detail: { files },
+            bubbles: false,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private isFileTypeAllowed(file: File): boolean {
+        return this.allowedFileTypes.includes(file.type);
+    }
+    private forceReflow(): void {
+        const progressElements = this.shadowRoot?.querySelectorAll('.progress');
+        progressElements?.forEach((el) => el.getBoundingClientRect());
+    }
+    private removeFile(index: number): void {
+        const removedFile = this.files[index];
+        this.files = this.files.filter((_, i) => i !== index);
+        const event = new CustomEvent('file-removed', {
+            detail: { removedFile },
+            bubbles: true,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private formatFileSize(size: number): string {
+        if (size < 1024) {
+            return `${size} bytes`;
+        }
+        else if (size < 1048576) {
+            return `${(size / 1024).toFixed(2)} KB`;
+        }
+        else {
+            return `${(size / 1048576).toFixed(2)} MB`;
+        }
+    }
+    private simulateUploadProgress(files: FileUploadProgress[]): void {
+        files.forEach((fileUpload) => {
+            const interval = setInterval(() => {
+                if (fileUpload.progress >= 100) {
+                    clearInterval(interval);
+                }
+                else {
+                    fileUpload.progress += 10;
+                    this.files = [...this.files];
+                }
+            }, 300);
+        });
+    }
+}
+
+```
+
+## handleDragLeave
+`src/components/Input/File/File`
+
+**AST Node Type:** *MethodDeclaration*
+
+#### JSDoc annotations:
+
+Handles the dragleave event when a file leaves the drop area.
+
+```bash
+@param {DragEvent} event - The dragleave event.
+```
+
+#### Code:
+
+```ts
+@customElement('tds-file-input')
+export class FileInput extends LitElement {
+    static get styles() {
+        return css `
+      ${unsafeCSS(customStyles)}
+    `;
+    }
+    @property({ type: Array })
+    files: FileUploadProgress[] = [];
+    @property({ type: Boolean })
+    isDragOver = false;
+    @property({ type: String })
+    maxFileSize = '2MB';
+    @property({ type: String })
+    iconName = 'upload';
+    @property({ type: String })
+    iconState = 'default';
+    @property({ type: String })
+    headingText = 'Drag & Drop or Choose file from device';
+    @property({ type: String })
+    secondaryText = 'Max file size';
+    @property({ type: String })
+    buttonText = 'Browse file';
+    @property({ type: Array })
+    allowedFileTypes: string[] = ['application/pdf'];
+    public clearFiles(): void {
+        this.files = [];
+    }
+    private mimeTypeToLabel = mimeTypeToLabel;
+    connectedCallback() {
+        super.connectedCallback();
+        document.addEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.addEventListener('clear-file-uploads', this.handleClearFiles);
+    }
+    disconnectedCallback() {
+        document.removeEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.removeEventListener('clear-file-uploads', this.handleClearFiles);
+        super.disconnectedCallback();
+    }
+    private handleClearFiles = (): void => {
+        this.clearFiles();
+    };
+    private handleFileError = (event: CustomEvent<{
+        fileName: string;
+        error: string;
+    }>) => {
+        const { fileName, error } = event.detail;
+        console.log('Handling error for file:', fileName, 'with error:', error);
+        this.files = this.files.map((fileUpload) => fileUpload.file.name === fileName ? { ...fileUpload, error } : fileUpload);
+    };
+    render(): TemplateResult {
+        return html `
+      <div class="file-input">
+        <div class="file-upload">
+          <label>Upload Template File</label>
+          <div
+            class=${classMap({ 'drop-area': true, dragover: this.isDragOver })}
+            @dragover="${this.handleDragOver}"
+            @dragenter="${this.handleDragEnter}"
+            @dragleave="${this.handleDragLeave}"
+            @drop="${this.handleDrop}"
+            @click="${this.handleClick}"
+          >
+            <tds-icon
+              name="${this.iconName}"
+              state="${this.iconState}"
+            ></tds-icon>
+            <div class="file-text">
+              <tds-heading as="h10">
+                <strong>${this.headingText}</strong>
+              </tds-heading>
+              <p class="extra-small">
+                ${this.formatAllowedFileTypes()}, ${this.secondaryText}
+                ${this.maxFileSize}.
+              </p>
+            </div>
+            <tds-button
+              type="button"
+              variant="filled"
+              theme="light"
+              label="Button"
+              color="teal"
+              compact
+            >
+              ${this.buttonText}
+            </tds-button>
+          </div>
+        </div>
+        ${this.files.length > 0
+            ? html `
+              <div class="file-list">
+                ${this.files.map((fileUpload, index) => html `
+                    <div class="file-item">
+                      <div class="file-progress">
+                        <div class="file-name">${fileUpload.file.name}</div>
+                        <div class="file-size">
+                          ${this.formatFileSize(fileUpload.file.size)}
+                        </div>
+                        <div class="progress-bar">
+                          <div
+                            class="progress ${fileUpload.error
+                ? 'progress-error'
+                : ''}"
+                            style="
+                              --progress-width: ${fileUpload.progress}%;
+                              background-color: ${fileUpload.error
+                ? '#cd163f'
+                : fileUpload.progress === 100
+                    ? '#4caf50'
+                    : '#F7B500'};
+                            "
+                          ></div>
+                          <span class="progress-percentage">
+                            ${fileUpload.error
+                ? '0%'
+                : `${fileUpload.progress}%`}
+                          </span>
+                        </div>
+                        ${fileUpload.error
+                ? html `<div class="error-message">
+                              ${fileUpload.error}
+                            </div>`
+                : ''}
+                      </div>
+                      <tds-file-close
+                        @click="${() => this.removeFile(index)}"
+                      ></tds-file-close>
+                    </div>
+                  `)}
+              </div>
+            `
+            : ''}
+      </div>
+    `;
+    }
+    private formatAllowedFileTypes(): string {
+        const types = this.allowedFileTypes || [];
+        return types.map((type) => this.mimeTypeToLabel[type] || type).join(', ');
+    }
+    private parseFileSize(size: string): number {
+        const units: Record<string, number> = {
+            B: 1,
+            KB: 1024,
+            MB: 1024 * 1024,
+            GB: 1024 * 1024 * 1024,
+        };
+        const match = size.match(/^(\d+(?:\.\d+)?)\s*(B|KB|MB|GB)$/i);
+        if (!match)
+            throw new Error('Invalid file size format');
+        const value = parseFloat(match[1]);
+        const unit = match[2].toUpperCase();
+        return value * (units[unit] || 1);
+    }
+    private handleDragOver(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    private handleDragEnter(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = true;
+    }
+    private handleDragLeave(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = false;
+    }
+    private handleDrop(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+        this.isDragOver = false;
+        const droppedFiles = Array.from(event.dataTransfer?.files || []);
+        this.addFiles(droppedFiles);
+        this.dispatchFilesEvent(droppedFiles);
+    }
+    private handleClick(): void {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.multiple = true;
+        fileInput.accept = this.allowedFileTypes.join(',');
+        fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+        fileInput.click();
+    }
+    private handleFileSelect(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        const selectedFiles = Array.from(input.files || []);
+        this.addFiles(selectedFiles);
+        this.dispatchFilesEvent(selectedFiles);
+    }
+    private addFiles(newFiles: File[]): void {
+        const maxSizeInBytes = this.parseFileSize(this.maxFileSize);
+        const validFiles = newFiles.map((file) => {
+            if (!this.isFileTypeAllowed(file)) {
+                return { file, progress: 0, error: 'Invalid file type.' };
+            }
+            if (file.size > maxSizeInBytes) {
+                return { file, progress: 0, error: 'File size exceeds the limit.' };
+            }
+            return { file, progress: 0 };
+        });
+        this.files = [...this.files, ...validFiles];
+        setTimeout(() => this.forceReflow(), 0);
+        this.simulateUploadProgress(validFiles.filter((file) => !file.error));
+        this.dispatchFilesEvent(newFiles);
+    }
+    private dispatchFilesEvent(files: File[]): void {
+        const event = new CustomEvent('file-selected', {
+            detail: { files },
+            bubbles: false,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private isFileTypeAllowed(file: File): boolean {
+        return this.allowedFileTypes.includes(file.type);
+    }
+    private forceReflow(): void {
+        const progressElements = this.shadowRoot?.querySelectorAll('.progress');
+        progressElements?.forEach((el) => el.getBoundingClientRect());
+    }
+    private removeFile(index: number): void {
+        const removedFile = this.files[index];
+        this.files = this.files.filter((_, i) => i !== index);
+        const event = new CustomEvent('file-removed', {
+            detail: { removedFile },
+            bubbles: true,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private formatFileSize(size: number): string {
+        if (size < 1024) {
+            return `${size} bytes`;
+        }
+        else if (size < 1048576) {
+            return `${(size / 1024).toFixed(2)} KB`;
+        }
+        else {
+            return `${(size / 1048576).toFixed(2)} MB`;
+        }
+    }
+    private simulateUploadProgress(files: FileUploadProgress[]): void {
+        files.forEach((fileUpload) => {
+            const interval = setInterval(() => {
+                if (fileUpload.progress >= 100) {
+                    clearInterval(interval);
+                }
+                else {
+                    fileUpload.progress += 10;
+                    this.files = [...this.files];
+                }
+            }, 300);
+        });
+    }
+}
+
+```
+
+## handleDrop
+`src/components/Input/File/File`
+
+**AST Node Type:** *MethodDeclaration*
+
+#### JSDoc annotations:
+
+Handles the drop event when a file is dropped in the drop area.
+
+```bash
+@param {DragEvent} event - The drop event.
+```
+
+#### Code:
+
+```ts
+@customElement('tds-file-input')
+export class FileInput extends LitElement {
+    static get styles() {
+        return css `
+      ${unsafeCSS(customStyles)}
+    `;
+    }
+    @property({ type: Array })
+    files: FileUploadProgress[] = [];
+    @property({ type: Boolean })
+    isDragOver = false;
+    @property({ type: String })
+    maxFileSize = '2MB';
+    @property({ type: String })
+    iconName = 'upload';
+    @property({ type: String })
+    iconState = 'default';
+    @property({ type: String })
+    headingText = 'Drag & Drop or Choose file from device';
+    @property({ type: String })
+    secondaryText = 'Max file size';
+    @property({ type: String })
+    buttonText = 'Browse file';
+    @property({ type: Array })
+    allowedFileTypes: string[] = ['application/pdf'];
+    public clearFiles(): void {
+        this.files = [];
+    }
+    private mimeTypeToLabel = mimeTypeToLabel;
+    connectedCallback() {
+        super.connectedCallback();
+        document.addEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.addEventListener('clear-file-uploads', this.handleClearFiles);
+    }
+    disconnectedCallback() {
+        document.removeEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.removeEventListener('clear-file-uploads', this.handleClearFiles);
+        super.disconnectedCallback();
+    }
+    private handleClearFiles = (): void => {
+        this.clearFiles();
+    };
+    private handleFileError = (event: CustomEvent<{
+        fileName: string;
+        error: string;
+    }>) => {
+        const { fileName, error } = event.detail;
+        console.log('Handling error for file:', fileName, 'with error:', error);
+        this.files = this.files.map((fileUpload) => fileUpload.file.name === fileName ? { ...fileUpload, error } : fileUpload);
+    };
+    render(): TemplateResult {
+        return html `
+      <div class="file-input">
+        <div class="file-upload">
+          <label>Upload Template File</label>
+          <div
+            class=${classMap({ 'drop-area': true, dragover: this.isDragOver })}
+            @dragover="${this.handleDragOver}"
+            @dragenter="${this.handleDragEnter}"
+            @dragleave="${this.handleDragLeave}"
+            @drop="${this.handleDrop}"
+            @click="${this.handleClick}"
+          >
+            <tds-icon
+              name="${this.iconName}"
+              state="${this.iconState}"
+            ></tds-icon>
+            <div class="file-text">
+              <tds-heading as="h10">
+                <strong>${this.headingText}</strong>
+              </tds-heading>
+              <p class="extra-small">
+                ${this.formatAllowedFileTypes()}, ${this.secondaryText}
+                ${this.maxFileSize}.
+              </p>
+            </div>
+            <tds-button
+              type="button"
+              variant="filled"
+              theme="light"
+              label="Button"
+              color="teal"
+              compact
+            >
+              ${this.buttonText}
+            </tds-button>
+          </div>
+        </div>
+        ${this.files.length > 0
+            ? html `
+              <div class="file-list">
+                ${this.files.map((fileUpload, index) => html `
+                    <div class="file-item">
+                      <div class="file-progress">
+                        <div class="file-name">${fileUpload.file.name}</div>
+                        <div class="file-size">
+                          ${this.formatFileSize(fileUpload.file.size)}
+                        </div>
+                        <div class="progress-bar">
+                          <div
+                            class="progress ${fileUpload.error
+                ? 'progress-error'
+                : ''}"
+                            style="
+                              --progress-width: ${fileUpload.progress}%;
+                              background-color: ${fileUpload.error
+                ? '#cd163f'
+                : fileUpload.progress === 100
+                    ? '#4caf50'
+                    : '#F7B500'};
+                            "
+                          ></div>
+                          <span class="progress-percentage">
+                            ${fileUpload.error
+                ? '0%'
+                : `${fileUpload.progress}%`}
+                          </span>
+                        </div>
+                        ${fileUpload.error
+                ? html `<div class="error-message">
+                              ${fileUpload.error}
+                            </div>`
+                : ''}
+                      </div>
+                      <tds-file-close
+                        @click="${() => this.removeFile(index)}"
+                      ></tds-file-close>
+                    </div>
+                  `)}
+              </div>
+            `
+            : ''}
+      </div>
+    `;
+    }
+    private formatAllowedFileTypes(): string {
+        const types = this.allowedFileTypes || [];
+        return types.map((type) => this.mimeTypeToLabel[type] || type).join(', ');
+    }
+    private parseFileSize(size: string): number {
+        const units: Record<string, number> = {
+            B: 1,
+            KB: 1024,
+            MB: 1024 * 1024,
+            GB: 1024 * 1024 * 1024,
+        };
+        const match = size.match(/^(\d+(?:\.\d+)?)\s*(B|KB|MB|GB)$/i);
+        if (!match)
+            throw new Error('Invalid file size format');
+        const value = parseFloat(match[1]);
+        const unit = match[2].toUpperCase();
+        return value * (units[unit] || 1);
+    }
+    private handleDragOver(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    private handleDragEnter(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = true;
+    }
+    private handleDragLeave(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = false;
+    }
+    private handleDrop(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+        this.isDragOver = false;
+        const droppedFiles = Array.from(event.dataTransfer?.files || []);
+        this.addFiles(droppedFiles);
+        this.dispatchFilesEvent(droppedFiles);
+    }
+    private handleClick(): void {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.multiple = true;
+        fileInput.accept = this.allowedFileTypes.join(',');
+        fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+        fileInput.click();
+    }
+    private handleFileSelect(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        const selectedFiles = Array.from(input.files || []);
+        this.addFiles(selectedFiles);
+        this.dispatchFilesEvent(selectedFiles);
+    }
+    private addFiles(newFiles: File[]): void {
+        const maxSizeInBytes = this.parseFileSize(this.maxFileSize);
+        const validFiles = newFiles.map((file) => {
+            if (!this.isFileTypeAllowed(file)) {
+                return { file, progress: 0, error: 'Invalid file type.' };
+            }
+            if (file.size > maxSizeInBytes) {
+                return { file, progress: 0, error: 'File size exceeds the limit.' };
+            }
+            return { file, progress: 0 };
+        });
+        this.files = [...this.files, ...validFiles];
+        setTimeout(() => this.forceReflow(), 0);
+        this.simulateUploadProgress(validFiles.filter((file) => !file.error));
+        this.dispatchFilesEvent(newFiles);
+    }
+    private dispatchFilesEvent(files: File[]): void {
+        const event = new CustomEvent('file-selected', {
+            detail: { files },
+            bubbles: false,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private isFileTypeAllowed(file: File): boolean {
+        return this.allowedFileTypes.includes(file.type);
+    }
+    private forceReflow(): void {
+        const progressElements = this.shadowRoot?.querySelectorAll('.progress');
+        progressElements?.forEach((el) => el.getBoundingClientRect());
+    }
+    private removeFile(index: number): void {
+        const removedFile = this.files[index];
+        this.files = this.files.filter((_, i) => i !== index);
+        const event = new CustomEvent('file-removed', {
+            detail: { removedFile },
+            bubbles: true,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private formatFileSize(size: number): string {
+        if (size < 1024) {
+            return `${size} bytes`;
+        }
+        else if (size < 1048576) {
+            return `${(size / 1024).toFixed(2)} KB`;
+        }
+        else {
+            return `${(size / 1048576).toFixed(2)} MB`;
+        }
+    }
+    private simulateUploadProgress(files: FileUploadProgress[]): void {
+        files.forEach((fileUpload) => {
+            const interval = setInterval(() => {
+                if (fileUpload.progress >= 100) {
+                    clearInterval(interval);
+                }
+                else {
+                    fileUpload.progress += 10;
+                    this.files = [...this.files];
+                }
+            }, 300);
+        });
+    }
+}
+
+```
+
+## handleClick
+`src/components/Input/File/File`
+
+**AST Node Type:** *MethodDeclaration*
+
+#### JSDoc annotations:
+
+Handles the click event to simulate file input selection.
+
+```bash
+
+```
+
+#### Code:
+
+```ts
+@customElement('tds-file-input')
+export class FileInput extends LitElement {
+    static get styles() {
+        return css `
+      ${unsafeCSS(customStyles)}
+    `;
+    }
+    @property({ type: Array })
+    files: FileUploadProgress[] = [];
+    @property({ type: Boolean })
+    isDragOver = false;
+    @property({ type: String })
+    maxFileSize = '2MB';
+    @property({ type: String })
+    iconName = 'upload';
+    @property({ type: String })
+    iconState = 'default';
+    @property({ type: String })
+    headingText = 'Drag & Drop or Choose file from device';
+    @property({ type: String })
+    secondaryText = 'Max file size';
+    @property({ type: String })
+    buttonText = 'Browse file';
+    @property({ type: Array })
+    allowedFileTypes: string[] = ['application/pdf'];
+    public clearFiles(): void {
+        this.files = [];
+    }
+    private mimeTypeToLabel = mimeTypeToLabel;
+    connectedCallback() {
+        super.connectedCallback();
+        document.addEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.addEventListener('clear-file-uploads', this.handleClearFiles);
+    }
+    disconnectedCallback() {
+        document.removeEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.removeEventListener('clear-file-uploads', this.handleClearFiles);
+        super.disconnectedCallback();
+    }
+    private handleClearFiles = (): void => {
+        this.clearFiles();
+    };
+    private handleFileError = (event: CustomEvent<{
+        fileName: string;
+        error: string;
+    }>) => {
+        const { fileName, error } = event.detail;
+        console.log('Handling error for file:', fileName, 'with error:', error);
+        this.files = this.files.map((fileUpload) => fileUpload.file.name === fileName ? { ...fileUpload, error } : fileUpload);
+    };
+    render(): TemplateResult {
+        return html `
+      <div class="file-input">
+        <div class="file-upload">
+          <label>Upload Template File</label>
+          <div
+            class=${classMap({ 'drop-area': true, dragover: this.isDragOver })}
+            @dragover="${this.handleDragOver}"
+            @dragenter="${this.handleDragEnter}"
+            @dragleave="${this.handleDragLeave}"
+            @drop="${this.handleDrop}"
+            @click="${this.handleClick}"
+          >
+            <tds-icon
+              name="${this.iconName}"
+              state="${this.iconState}"
+            ></tds-icon>
+            <div class="file-text">
+              <tds-heading as="h10">
+                <strong>${this.headingText}</strong>
+              </tds-heading>
+              <p class="extra-small">
+                ${this.formatAllowedFileTypes()}, ${this.secondaryText}
+                ${this.maxFileSize}.
+              </p>
+            </div>
+            <tds-button
+              type="button"
+              variant="filled"
+              theme="light"
+              label="Button"
+              color="teal"
+              compact
+            >
+              ${this.buttonText}
+            </tds-button>
+          </div>
+        </div>
+        ${this.files.length > 0
+            ? html `
+              <div class="file-list">
+                ${this.files.map((fileUpload, index) => html `
+                    <div class="file-item">
+                      <div class="file-progress">
+                        <div class="file-name">${fileUpload.file.name}</div>
+                        <div class="file-size">
+                          ${this.formatFileSize(fileUpload.file.size)}
+                        </div>
+                        <div class="progress-bar">
+                          <div
+                            class="progress ${fileUpload.error
+                ? 'progress-error'
+                : ''}"
+                            style="
+                              --progress-width: ${fileUpload.progress}%;
+                              background-color: ${fileUpload.error
+                ? '#cd163f'
+                : fileUpload.progress === 100
+                    ? '#4caf50'
+                    : '#F7B500'};
+                            "
+                          ></div>
+                          <span class="progress-percentage">
+                            ${fileUpload.error
+                ? '0%'
+                : `${fileUpload.progress}%`}
+                          </span>
+                        </div>
+                        ${fileUpload.error
+                ? html `<div class="error-message">
+                              ${fileUpload.error}
+                            </div>`
+                : ''}
+                      </div>
+                      <tds-file-close
+                        @click="${() => this.removeFile(index)}"
+                      ></tds-file-close>
+                    </div>
+                  `)}
+              </div>
+            `
+            : ''}
+      </div>
+    `;
+    }
+    private formatAllowedFileTypes(): string {
+        const types = this.allowedFileTypes || [];
+        return types.map((type) => this.mimeTypeToLabel[type] || type).join(', ');
+    }
+    private parseFileSize(size: string): number {
+        const units: Record<string, number> = {
+            B: 1,
+            KB: 1024,
+            MB: 1024 * 1024,
+            GB: 1024 * 1024 * 1024,
+        };
+        const match = size.match(/^(\d+(?:\.\d+)?)\s*(B|KB|MB|GB)$/i);
+        if (!match)
+            throw new Error('Invalid file size format');
+        const value = parseFloat(match[1]);
+        const unit = match[2].toUpperCase();
+        return value * (units[unit] || 1);
+    }
+    private handleDragOver(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    private handleDragEnter(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = true;
+    }
+    private handleDragLeave(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = false;
+    }
+    private handleDrop(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+        this.isDragOver = false;
+        const droppedFiles = Array.from(event.dataTransfer?.files || []);
+        this.addFiles(droppedFiles);
+        this.dispatchFilesEvent(droppedFiles);
+    }
+    private handleClick(): void {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.multiple = true;
+        fileInput.accept = this.allowedFileTypes.join(',');
+        fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+        fileInput.click();
+    }
+    private handleFileSelect(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        const selectedFiles = Array.from(input.files || []);
+        this.addFiles(selectedFiles);
+        this.dispatchFilesEvent(selectedFiles);
+    }
+    private addFiles(newFiles: File[]): void {
+        const maxSizeInBytes = this.parseFileSize(this.maxFileSize);
+        const validFiles = newFiles.map((file) => {
+            if (!this.isFileTypeAllowed(file)) {
+                return { file, progress: 0, error: 'Invalid file type.' };
+            }
+            if (file.size > maxSizeInBytes) {
+                return { file, progress: 0, error: 'File size exceeds the limit.' };
+            }
+            return { file, progress: 0 };
+        });
+        this.files = [...this.files, ...validFiles];
+        setTimeout(() => this.forceReflow(), 0);
+        this.simulateUploadProgress(validFiles.filter((file) => !file.error));
+        this.dispatchFilesEvent(newFiles);
+    }
+    private dispatchFilesEvent(files: File[]): void {
+        const event = new CustomEvent('file-selected', {
+            detail: { files },
+            bubbles: false,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private isFileTypeAllowed(file: File): boolean {
+        return this.allowedFileTypes.includes(file.type);
+    }
+    private forceReflow(): void {
+        const progressElements = this.shadowRoot?.querySelectorAll('.progress');
+        progressElements?.forEach((el) => el.getBoundingClientRect());
+    }
+    private removeFile(index: number): void {
+        const removedFile = this.files[index];
+        this.files = this.files.filter((_, i) => i !== index);
+        const event = new CustomEvent('file-removed', {
+            detail: { removedFile },
+            bubbles: true,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private formatFileSize(size: number): string {
+        if (size < 1024) {
+            return `${size} bytes`;
+        }
+        else if (size < 1048576) {
+            return `${(size / 1024).toFixed(2)} KB`;
+        }
+        else {
+            return `${(size / 1048576).toFixed(2)} MB`;
+        }
+    }
+    private simulateUploadProgress(files: FileUploadProgress[]): void {
+        files.forEach((fileUpload) => {
+            const interval = setInterval(() => {
+                if (fileUpload.progress >= 100) {
+                    clearInterval(interval);
+                }
+                else {
+                    fileUpload.progress += 10;
+                    this.files = [...this.files];
+                }
+            }, 300);
+        });
+    }
+}
+
+```
+
+## handleFileSelect
+`src/components/Input/File/File`
+
+**AST Node Type:** *MethodDeclaration*
+
+#### JSDoc annotations:
+
+Handles the selection of files through the file input element.
+
+```bash
+@param {Event} event - The change event of the file input.
+```
+
+#### Code:
+
+```ts
+@customElement('tds-file-input')
+export class FileInput extends LitElement {
+    static get styles() {
+        return css `
+      ${unsafeCSS(customStyles)}
+    `;
+    }
+    @property({ type: Array })
+    files: FileUploadProgress[] = [];
+    @property({ type: Boolean })
+    isDragOver = false;
+    @property({ type: String })
+    maxFileSize = '2MB';
+    @property({ type: String })
+    iconName = 'upload';
+    @property({ type: String })
+    iconState = 'default';
+    @property({ type: String })
+    headingText = 'Drag & Drop or Choose file from device';
+    @property({ type: String })
+    secondaryText = 'Max file size';
+    @property({ type: String })
+    buttonText = 'Browse file';
+    @property({ type: Array })
+    allowedFileTypes: string[] = ['application/pdf'];
+    public clearFiles(): void {
+        this.files = [];
+    }
+    private mimeTypeToLabel = mimeTypeToLabel;
+    connectedCallback() {
+        super.connectedCallback();
+        document.addEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.addEventListener('clear-file-uploads', this.handleClearFiles);
+    }
+    disconnectedCallback() {
+        document.removeEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.removeEventListener('clear-file-uploads', this.handleClearFiles);
+        super.disconnectedCallback();
+    }
+    private handleClearFiles = (): void => {
+        this.clearFiles();
+    };
+    private handleFileError = (event: CustomEvent<{
+        fileName: string;
+        error: string;
+    }>) => {
+        const { fileName, error } = event.detail;
+        console.log('Handling error for file:', fileName, 'with error:', error);
+        this.files = this.files.map((fileUpload) => fileUpload.file.name === fileName ? { ...fileUpload, error } : fileUpload);
+    };
+    render(): TemplateResult {
+        return html `
+      <div class="file-input">
+        <div class="file-upload">
+          <label>Upload Template File</label>
+          <div
+            class=${classMap({ 'drop-area': true, dragover: this.isDragOver })}
+            @dragover="${this.handleDragOver}"
+            @dragenter="${this.handleDragEnter}"
+            @dragleave="${this.handleDragLeave}"
+            @drop="${this.handleDrop}"
+            @click="${this.handleClick}"
+          >
+            <tds-icon
+              name="${this.iconName}"
+              state="${this.iconState}"
+            ></tds-icon>
+            <div class="file-text">
+              <tds-heading as="h10">
+                <strong>${this.headingText}</strong>
+              </tds-heading>
+              <p class="extra-small">
+                ${this.formatAllowedFileTypes()}, ${this.secondaryText}
+                ${this.maxFileSize}.
+              </p>
+            </div>
+            <tds-button
+              type="button"
+              variant="filled"
+              theme="light"
+              label="Button"
+              color="teal"
+              compact
+            >
+              ${this.buttonText}
+            </tds-button>
+          </div>
+        </div>
+        ${this.files.length > 0
+            ? html `
+              <div class="file-list">
+                ${this.files.map((fileUpload, index) => html `
+                    <div class="file-item">
+                      <div class="file-progress">
+                        <div class="file-name">${fileUpload.file.name}</div>
+                        <div class="file-size">
+                          ${this.formatFileSize(fileUpload.file.size)}
+                        </div>
+                        <div class="progress-bar">
+                          <div
+                            class="progress ${fileUpload.error
+                ? 'progress-error'
+                : ''}"
+                            style="
+                              --progress-width: ${fileUpload.progress}%;
+                              background-color: ${fileUpload.error
+                ? '#cd163f'
+                : fileUpload.progress === 100
+                    ? '#4caf50'
+                    : '#F7B500'};
+                            "
+                          ></div>
+                          <span class="progress-percentage">
+                            ${fileUpload.error
+                ? '0%'
+                : `${fileUpload.progress}%`}
+                          </span>
+                        </div>
+                        ${fileUpload.error
+                ? html `<div class="error-message">
+                              ${fileUpload.error}
+                            </div>`
+                : ''}
+                      </div>
+                      <tds-file-close
+                        @click="${() => this.removeFile(index)}"
+                      ></tds-file-close>
+                    </div>
+                  `)}
+              </div>
+            `
+            : ''}
+      </div>
+    `;
+    }
+    private formatAllowedFileTypes(): string {
+        const types = this.allowedFileTypes || [];
+        return types.map((type) => this.mimeTypeToLabel[type] || type).join(', ');
+    }
+    private parseFileSize(size: string): number {
+        const units: Record<string, number> = {
+            B: 1,
+            KB: 1024,
+            MB: 1024 * 1024,
+            GB: 1024 * 1024 * 1024,
+        };
+        const match = size.match(/^(\d+(?:\.\d+)?)\s*(B|KB|MB|GB)$/i);
+        if (!match)
+            throw new Error('Invalid file size format');
+        const value = parseFloat(match[1]);
+        const unit = match[2].toUpperCase();
+        return value * (units[unit] || 1);
+    }
+    private handleDragOver(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    private handleDragEnter(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = true;
+    }
+    private handleDragLeave(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = false;
+    }
+    private handleDrop(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+        this.isDragOver = false;
+        const droppedFiles = Array.from(event.dataTransfer?.files || []);
+        this.addFiles(droppedFiles);
+        this.dispatchFilesEvent(droppedFiles);
+    }
+    private handleClick(): void {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.multiple = true;
+        fileInput.accept = this.allowedFileTypes.join(',');
+        fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+        fileInput.click();
+    }
+    private handleFileSelect(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        const selectedFiles = Array.from(input.files || []);
+        this.addFiles(selectedFiles);
+        this.dispatchFilesEvent(selectedFiles);
+    }
+    private addFiles(newFiles: File[]): void {
+        const maxSizeInBytes = this.parseFileSize(this.maxFileSize);
+        const validFiles = newFiles.map((file) => {
+            if (!this.isFileTypeAllowed(file)) {
+                return { file, progress: 0, error: 'Invalid file type.' };
+            }
+            if (file.size > maxSizeInBytes) {
+                return { file, progress: 0, error: 'File size exceeds the limit.' };
+            }
+            return { file, progress: 0 };
+        });
+        this.files = [...this.files, ...validFiles];
+        setTimeout(() => this.forceReflow(), 0);
+        this.simulateUploadProgress(validFiles.filter((file) => !file.error));
+        this.dispatchFilesEvent(newFiles);
+    }
+    private dispatchFilesEvent(files: File[]): void {
+        const event = new CustomEvent('file-selected', {
+            detail: { files },
+            bubbles: false,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private isFileTypeAllowed(file: File): boolean {
+        return this.allowedFileTypes.includes(file.type);
+    }
+    private forceReflow(): void {
+        const progressElements = this.shadowRoot?.querySelectorAll('.progress');
+        progressElements?.forEach((el) => el.getBoundingClientRect());
+    }
+    private removeFile(index: number): void {
+        const removedFile = this.files[index];
+        this.files = this.files.filter((_, i) => i !== index);
+        const event = new CustomEvent('file-removed', {
+            detail: { removedFile },
+            bubbles: true,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private formatFileSize(size: number): string {
+        if (size < 1024) {
+            return `${size} bytes`;
+        }
+        else if (size < 1048576) {
+            return `${(size / 1024).toFixed(2)} KB`;
+        }
+        else {
+            return `${(size / 1048576).toFixed(2)} MB`;
+        }
+    }
+    private simulateUploadProgress(files: FileUploadProgress[]): void {
+        files.forEach((fileUpload) => {
+            const interval = setInterval(() => {
+                if (fileUpload.progress >= 100) {
+                    clearInterval(interval);
+                }
+                else {
+                    fileUpload.progress += 10;
+                    this.files = [...this.files];
+                }
+            }, 300);
+        });
+    }
+}
+
+```
+
+## addFiles
+`src/components/Input/File/File`
+
+**AST Node Type:** *MethodDeclaration*
+
+#### JSDoc annotations:
+
+Adds the selected files to the list of files to be uploaded.
+
+```bash
+@param {File[]} newFiles - List of newly selected files.
+```
+
+#### Code:
+
+```ts
+@customElement('tds-file-input')
+export class FileInput extends LitElement {
+    static get styles() {
+        return css `
+      ${unsafeCSS(customStyles)}
+    `;
+    }
+    @property({ type: Array })
+    files: FileUploadProgress[] = [];
+    @property({ type: Boolean })
+    isDragOver = false;
+    @property({ type: String })
+    maxFileSize = '2MB';
+    @property({ type: String })
+    iconName = 'upload';
+    @property({ type: String })
+    iconState = 'default';
+    @property({ type: String })
+    headingText = 'Drag & Drop or Choose file from device';
+    @property({ type: String })
+    secondaryText = 'Max file size';
+    @property({ type: String })
+    buttonText = 'Browse file';
+    @property({ type: Array })
+    allowedFileTypes: string[] = ['application/pdf'];
+    public clearFiles(): void {
+        this.files = [];
+    }
+    private mimeTypeToLabel = mimeTypeToLabel;
+    connectedCallback() {
+        super.connectedCallback();
+        document.addEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.addEventListener('clear-file-uploads', this.handleClearFiles);
+    }
+    disconnectedCallback() {
+        document.removeEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.removeEventListener('clear-file-uploads', this.handleClearFiles);
+        super.disconnectedCallback();
+    }
+    private handleClearFiles = (): void => {
+        this.clearFiles();
+    };
+    private handleFileError = (event: CustomEvent<{
+        fileName: string;
+        error: string;
+    }>) => {
+        const { fileName, error } = event.detail;
+        console.log('Handling error for file:', fileName, 'with error:', error);
+        this.files = this.files.map((fileUpload) => fileUpload.file.name === fileName ? { ...fileUpload, error } : fileUpload);
+    };
+    render(): TemplateResult {
+        return html `
+      <div class="file-input">
+        <div class="file-upload">
+          <label>Upload Template File</label>
+          <div
+            class=${classMap({ 'drop-area': true, dragover: this.isDragOver })}
+            @dragover="${this.handleDragOver}"
+            @dragenter="${this.handleDragEnter}"
+            @dragleave="${this.handleDragLeave}"
+            @drop="${this.handleDrop}"
+            @click="${this.handleClick}"
+          >
+            <tds-icon
+              name="${this.iconName}"
+              state="${this.iconState}"
+            ></tds-icon>
+            <div class="file-text">
+              <tds-heading as="h10">
+                <strong>${this.headingText}</strong>
+              </tds-heading>
+              <p class="extra-small">
+                ${this.formatAllowedFileTypes()}, ${this.secondaryText}
+                ${this.maxFileSize}.
+              </p>
+            </div>
+            <tds-button
+              type="button"
+              variant="filled"
+              theme="light"
+              label="Button"
+              color="teal"
+              compact
+            >
+              ${this.buttonText}
+            </tds-button>
+          </div>
+        </div>
+        ${this.files.length > 0
+            ? html `
+              <div class="file-list">
+                ${this.files.map((fileUpload, index) => html `
+                    <div class="file-item">
+                      <div class="file-progress">
+                        <div class="file-name">${fileUpload.file.name}</div>
+                        <div class="file-size">
+                          ${this.formatFileSize(fileUpload.file.size)}
+                        </div>
+                        <div class="progress-bar">
+                          <div
+                            class="progress ${fileUpload.error
+                ? 'progress-error'
+                : ''}"
+                            style="
+                              --progress-width: ${fileUpload.progress}%;
+                              background-color: ${fileUpload.error
+                ? '#cd163f'
+                : fileUpload.progress === 100
+                    ? '#4caf50'
+                    : '#F7B500'};
+                            "
+                          ></div>
+                          <span class="progress-percentage">
+                            ${fileUpload.error
+                ? '0%'
+                : `${fileUpload.progress}%`}
+                          </span>
+                        </div>
+                        ${fileUpload.error
+                ? html `<div class="error-message">
+                              ${fileUpload.error}
+                            </div>`
+                : ''}
+                      </div>
+                      <tds-file-close
+                        @click="${() => this.removeFile(index)}"
+                      ></tds-file-close>
+                    </div>
+                  `)}
+              </div>
+            `
+            : ''}
+      </div>
+    `;
+    }
+    private formatAllowedFileTypes(): string {
+        const types = this.allowedFileTypes || [];
+        return types.map((type) => this.mimeTypeToLabel[type] || type).join(', ');
+    }
+    private parseFileSize(size: string): number {
+        const units: Record<string, number> = {
+            B: 1,
+            KB: 1024,
+            MB: 1024 * 1024,
+            GB: 1024 * 1024 * 1024,
+        };
+        const match = size.match(/^(\d+(?:\.\d+)?)\s*(B|KB|MB|GB)$/i);
+        if (!match)
+            throw new Error('Invalid file size format');
+        const value = parseFloat(match[1]);
+        const unit = match[2].toUpperCase();
+        return value * (units[unit] || 1);
+    }
+    private handleDragOver(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    private handleDragEnter(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = true;
+    }
+    private handleDragLeave(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = false;
+    }
+    private handleDrop(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+        this.isDragOver = false;
+        const droppedFiles = Array.from(event.dataTransfer?.files || []);
+        this.addFiles(droppedFiles);
+        this.dispatchFilesEvent(droppedFiles);
+    }
+    private handleClick(): void {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.multiple = true;
+        fileInput.accept = this.allowedFileTypes.join(',');
+        fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+        fileInput.click();
+    }
+    private handleFileSelect(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        const selectedFiles = Array.from(input.files || []);
+        this.addFiles(selectedFiles);
+        this.dispatchFilesEvent(selectedFiles);
+    }
+    private addFiles(newFiles: File[]): void {
+        const maxSizeInBytes = this.parseFileSize(this.maxFileSize);
+        const validFiles = newFiles.map((file) => {
+            if (!this.isFileTypeAllowed(file)) {
+                return { file, progress: 0, error: 'Invalid file type.' };
+            }
+            if (file.size > maxSizeInBytes) {
+                return { file, progress: 0, error: 'File size exceeds the limit.' };
+            }
+            return { file, progress: 0 };
+        });
+        this.files = [...this.files, ...validFiles];
+        setTimeout(() => this.forceReflow(), 0);
+        this.simulateUploadProgress(validFiles.filter((file) => !file.error));
+        this.dispatchFilesEvent(newFiles);
+    }
+    private dispatchFilesEvent(files: File[]): void {
+        const event = new CustomEvent('file-selected', {
+            detail: { files },
+            bubbles: false,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private isFileTypeAllowed(file: File): boolean {
+        return this.allowedFileTypes.includes(file.type);
+    }
+    private forceReflow(): void {
+        const progressElements = this.shadowRoot?.querySelectorAll('.progress');
+        progressElements?.forEach((el) => el.getBoundingClientRect());
+    }
+    private removeFile(index: number): void {
+        const removedFile = this.files[index];
+        this.files = this.files.filter((_, i) => i !== index);
+        const event = new CustomEvent('file-removed', {
+            detail: { removedFile },
+            bubbles: true,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private formatFileSize(size: number): string {
+        if (size < 1024) {
+            return `${size} bytes`;
+        }
+        else if (size < 1048576) {
+            return `${(size / 1024).toFixed(2)} KB`;
+        }
+        else {
+            return `${(size / 1048576).toFixed(2)} MB`;
+        }
+    }
+    private simulateUploadProgress(files: FileUploadProgress[]): void {
+        files.forEach((fileUpload) => {
+            const interval = setInterval(() => {
+                if (fileUpload.progress >= 100) {
+                    clearInterval(interval);
+                }
+                else {
+                    fileUpload.progress += 10;
+                    this.files = [...this.files];
+                }
+            }, 300);
+        });
+    }
+}
+
+```
+
+## dispatchFilesEvent
+`src/components/Input/File/File`
+
+**AST Node Type:** *MethodDeclaration*
+
+#### JSDoc annotations:
+
+Dispatches a custom event with the selected files.
+
+```bash
+@param {File[]} files - List of selected files.
+```
+
+#### Code:
+
+```ts
+@customElement('tds-file-input')
+export class FileInput extends LitElement {
+    static get styles() {
+        return css `
+      ${unsafeCSS(customStyles)}
+    `;
+    }
+    @property({ type: Array })
+    files: FileUploadProgress[] = [];
+    @property({ type: Boolean })
+    isDragOver = false;
+    @property({ type: String })
+    maxFileSize = '2MB';
+    @property({ type: String })
+    iconName = 'upload';
+    @property({ type: String })
+    iconState = 'default';
+    @property({ type: String })
+    headingText = 'Drag & Drop or Choose file from device';
+    @property({ type: String })
+    secondaryText = 'Max file size';
+    @property({ type: String })
+    buttonText = 'Browse file';
+    @property({ type: Array })
+    allowedFileTypes: string[] = ['application/pdf'];
+    public clearFiles(): void {
+        this.files = [];
+    }
+    private mimeTypeToLabel = mimeTypeToLabel;
+    connectedCallback() {
+        super.connectedCallback();
+        document.addEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.addEventListener('clear-file-uploads', this.handleClearFiles);
+    }
+    disconnectedCallback() {
+        document.removeEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.removeEventListener('clear-file-uploads', this.handleClearFiles);
+        super.disconnectedCallback();
+    }
+    private handleClearFiles = (): void => {
+        this.clearFiles();
+    };
+    private handleFileError = (event: CustomEvent<{
+        fileName: string;
+        error: string;
+    }>) => {
+        const { fileName, error } = event.detail;
+        console.log('Handling error for file:', fileName, 'with error:', error);
+        this.files = this.files.map((fileUpload) => fileUpload.file.name === fileName ? { ...fileUpload, error } : fileUpload);
+    };
+    render(): TemplateResult {
+        return html `
+      <div class="file-input">
+        <div class="file-upload">
+          <label>Upload Template File</label>
+          <div
+            class=${classMap({ 'drop-area': true, dragover: this.isDragOver })}
+            @dragover="${this.handleDragOver}"
+            @dragenter="${this.handleDragEnter}"
+            @dragleave="${this.handleDragLeave}"
+            @drop="${this.handleDrop}"
+            @click="${this.handleClick}"
+          >
+            <tds-icon
+              name="${this.iconName}"
+              state="${this.iconState}"
+            ></tds-icon>
+            <div class="file-text">
+              <tds-heading as="h10">
+                <strong>${this.headingText}</strong>
+              </tds-heading>
+              <p class="extra-small">
+                ${this.formatAllowedFileTypes()}, ${this.secondaryText}
+                ${this.maxFileSize}.
+              </p>
+            </div>
+            <tds-button
+              type="button"
+              variant="filled"
+              theme="light"
+              label="Button"
+              color="teal"
+              compact
+            >
+              ${this.buttonText}
+            </tds-button>
+          </div>
+        </div>
+        ${this.files.length > 0
+            ? html `
+              <div class="file-list">
+                ${this.files.map((fileUpload, index) => html `
+                    <div class="file-item">
+                      <div class="file-progress">
+                        <div class="file-name">${fileUpload.file.name}</div>
+                        <div class="file-size">
+                          ${this.formatFileSize(fileUpload.file.size)}
+                        </div>
+                        <div class="progress-bar">
+                          <div
+                            class="progress ${fileUpload.error
+                ? 'progress-error'
+                : ''}"
+                            style="
+                              --progress-width: ${fileUpload.progress}%;
+                              background-color: ${fileUpload.error
+                ? '#cd163f'
+                : fileUpload.progress === 100
+                    ? '#4caf50'
+                    : '#F7B500'};
+                            "
+                          ></div>
+                          <span class="progress-percentage">
+                            ${fileUpload.error
+                ? '0%'
+                : `${fileUpload.progress}%`}
+                          </span>
+                        </div>
+                        ${fileUpload.error
+                ? html `<div class="error-message">
+                              ${fileUpload.error}
+                            </div>`
+                : ''}
+                      </div>
+                      <tds-file-close
+                        @click="${() => this.removeFile(index)}"
+                      ></tds-file-close>
+                    </div>
+                  `)}
+              </div>
+            `
+            : ''}
+      </div>
+    `;
+    }
+    private formatAllowedFileTypes(): string {
+        const types = this.allowedFileTypes || [];
+        return types.map((type) => this.mimeTypeToLabel[type] || type).join(', ');
+    }
+    private parseFileSize(size: string): number {
+        const units: Record<string, number> = {
+            B: 1,
+            KB: 1024,
+            MB: 1024 * 1024,
+            GB: 1024 * 1024 * 1024,
+        };
+        const match = size.match(/^(\d+(?:\.\d+)?)\s*(B|KB|MB|GB)$/i);
+        if (!match)
+            throw new Error('Invalid file size format');
+        const value = parseFloat(match[1]);
+        const unit = match[2].toUpperCase();
+        return value * (units[unit] || 1);
+    }
+    private handleDragOver(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    private handleDragEnter(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = true;
+    }
+    private handleDragLeave(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = false;
+    }
+    private handleDrop(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+        this.isDragOver = false;
+        const droppedFiles = Array.from(event.dataTransfer?.files || []);
+        this.addFiles(droppedFiles);
+        this.dispatchFilesEvent(droppedFiles);
+    }
+    private handleClick(): void {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.multiple = true;
+        fileInput.accept = this.allowedFileTypes.join(',');
+        fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+        fileInput.click();
+    }
+    private handleFileSelect(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        const selectedFiles = Array.from(input.files || []);
+        this.addFiles(selectedFiles);
+        this.dispatchFilesEvent(selectedFiles);
+    }
+    private addFiles(newFiles: File[]): void {
+        const maxSizeInBytes = this.parseFileSize(this.maxFileSize);
+        const validFiles = newFiles.map((file) => {
+            if (!this.isFileTypeAllowed(file)) {
+                return { file, progress: 0, error: 'Invalid file type.' };
+            }
+            if (file.size > maxSizeInBytes) {
+                return { file, progress: 0, error: 'File size exceeds the limit.' };
+            }
+            return { file, progress: 0 };
+        });
+        this.files = [...this.files, ...validFiles];
+        setTimeout(() => this.forceReflow(), 0);
+        this.simulateUploadProgress(validFiles.filter((file) => !file.error));
+        this.dispatchFilesEvent(newFiles);
+    }
+    private dispatchFilesEvent(files: File[]): void {
+        const event = new CustomEvent('file-selected', {
+            detail: { files },
+            bubbles: false,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private isFileTypeAllowed(file: File): boolean {
+        return this.allowedFileTypes.includes(file.type);
+    }
+    private forceReflow(): void {
+        const progressElements = this.shadowRoot?.querySelectorAll('.progress');
+        progressElements?.forEach((el) => el.getBoundingClientRect());
+    }
+    private removeFile(index: number): void {
+        const removedFile = this.files[index];
+        this.files = this.files.filter((_, i) => i !== index);
+        const event = new CustomEvent('file-removed', {
+            detail: { removedFile },
+            bubbles: true,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private formatFileSize(size: number): string {
+        if (size < 1024) {
+            return `${size} bytes`;
+        }
+        else if (size < 1048576) {
+            return `${(size / 1024).toFixed(2)} KB`;
+        }
+        else {
+            return `${(size / 1048576).toFixed(2)} MB`;
+        }
+    }
+    private simulateUploadProgress(files: FileUploadProgress[]): void {
+        files.forEach((fileUpload) => {
+            const interval = setInterval(() => {
+                if (fileUpload.progress >= 100) {
+                    clearInterval(interval);
+                }
+                else {
+                    fileUpload.progress += 10;
+                    this.files = [...this.files];
+                }
+            }, 300);
+        });
+    }
+}
+
+```
+
+## isFileTypeAllowed
+`src/components/Input/File/File`
+
+**AST Node Type:** *MethodDeclaration*
+
+#### JSDoc annotations:
+
+Checks if a file's type is allowed for upload.
+
+```bash
+@param {File} file - The file to be checked.
+
+@returns {boolean} - True if the file type is allowed, false otherwise.
+```
+
+#### Code:
+
+```ts
+@customElement('tds-file-input')
+export class FileInput extends LitElement {
+    static get styles() {
+        return css `
+      ${unsafeCSS(customStyles)}
+    `;
+    }
+    @property({ type: Array })
+    files: FileUploadProgress[] = [];
+    @property({ type: Boolean })
+    isDragOver = false;
+    @property({ type: String })
+    maxFileSize = '2MB';
+    @property({ type: String })
+    iconName = 'upload';
+    @property({ type: String })
+    iconState = 'default';
+    @property({ type: String })
+    headingText = 'Drag & Drop or Choose file from device';
+    @property({ type: String })
+    secondaryText = 'Max file size';
+    @property({ type: String })
+    buttonText = 'Browse file';
+    @property({ type: Array })
+    allowedFileTypes: string[] = ['application/pdf'];
+    public clearFiles(): void {
+        this.files = [];
+    }
+    private mimeTypeToLabel = mimeTypeToLabel;
+    connectedCallback() {
+        super.connectedCallback();
+        document.addEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.addEventListener('clear-file-uploads', this.handleClearFiles);
+    }
+    disconnectedCallback() {
+        document.removeEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.removeEventListener('clear-file-uploads', this.handleClearFiles);
+        super.disconnectedCallback();
+    }
+    private handleClearFiles = (): void => {
+        this.clearFiles();
+    };
+    private handleFileError = (event: CustomEvent<{
+        fileName: string;
+        error: string;
+    }>) => {
+        const { fileName, error } = event.detail;
+        console.log('Handling error for file:', fileName, 'with error:', error);
+        this.files = this.files.map((fileUpload) => fileUpload.file.name === fileName ? { ...fileUpload, error } : fileUpload);
+    };
+    render(): TemplateResult {
+        return html `
+      <div class="file-input">
+        <div class="file-upload">
+          <label>Upload Template File</label>
+          <div
+            class=${classMap({ 'drop-area': true, dragover: this.isDragOver })}
+            @dragover="${this.handleDragOver}"
+            @dragenter="${this.handleDragEnter}"
+            @dragleave="${this.handleDragLeave}"
+            @drop="${this.handleDrop}"
+            @click="${this.handleClick}"
+          >
+            <tds-icon
+              name="${this.iconName}"
+              state="${this.iconState}"
+            ></tds-icon>
+            <div class="file-text">
+              <tds-heading as="h10">
+                <strong>${this.headingText}</strong>
+              </tds-heading>
+              <p class="extra-small">
+                ${this.formatAllowedFileTypes()}, ${this.secondaryText}
+                ${this.maxFileSize}.
+              </p>
+            </div>
+            <tds-button
+              type="button"
+              variant="filled"
+              theme="light"
+              label="Button"
+              color="teal"
+              compact
+            >
+              ${this.buttonText}
+            </tds-button>
+          </div>
+        </div>
+        ${this.files.length > 0
+            ? html `
+              <div class="file-list">
+                ${this.files.map((fileUpload, index) => html `
+                    <div class="file-item">
+                      <div class="file-progress">
+                        <div class="file-name">${fileUpload.file.name}</div>
+                        <div class="file-size">
+                          ${this.formatFileSize(fileUpload.file.size)}
+                        </div>
+                        <div class="progress-bar">
+                          <div
+                            class="progress ${fileUpload.error
+                ? 'progress-error'
+                : ''}"
+                            style="
+                              --progress-width: ${fileUpload.progress}%;
+                              background-color: ${fileUpload.error
+                ? '#cd163f'
+                : fileUpload.progress === 100
+                    ? '#4caf50'
+                    : '#F7B500'};
+                            "
+                          ></div>
+                          <span class="progress-percentage">
+                            ${fileUpload.error
+                ? '0%'
+                : `${fileUpload.progress}%`}
+                          </span>
+                        </div>
+                        ${fileUpload.error
+                ? html `<div class="error-message">
+                              ${fileUpload.error}
+                            </div>`
+                : ''}
+                      </div>
+                      <tds-file-close
+                        @click="${() => this.removeFile(index)}"
+                      ></tds-file-close>
+                    </div>
+                  `)}
+              </div>
+            `
+            : ''}
+      </div>
+    `;
+    }
+    private formatAllowedFileTypes(): string {
+        const types = this.allowedFileTypes || [];
+        return types.map((type) => this.mimeTypeToLabel[type] || type).join(', ');
+    }
+    private parseFileSize(size: string): number {
+        const units: Record<string, number> = {
+            B: 1,
+            KB: 1024,
+            MB: 1024 * 1024,
+            GB: 1024 * 1024 * 1024,
+        };
+        const match = size.match(/^(\d+(?:\.\d+)?)\s*(B|KB|MB|GB)$/i);
+        if (!match)
+            throw new Error('Invalid file size format');
+        const value = parseFloat(match[1]);
+        const unit = match[2].toUpperCase();
+        return value * (units[unit] || 1);
+    }
+    private handleDragOver(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    private handleDragEnter(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = true;
+    }
+    private handleDragLeave(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = false;
+    }
+    private handleDrop(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+        this.isDragOver = false;
+        const droppedFiles = Array.from(event.dataTransfer?.files || []);
+        this.addFiles(droppedFiles);
+        this.dispatchFilesEvent(droppedFiles);
+    }
+    private handleClick(): void {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.multiple = true;
+        fileInput.accept = this.allowedFileTypes.join(',');
+        fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+        fileInput.click();
+    }
+    private handleFileSelect(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        const selectedFiles = Array.from(input.files || []);
+        this.addFiles(selectedFiles);
+        this.dispatchFilesEvent(selectedFiles);
+    }
+    private addFiles(newFiles: File[]): void {
+        const maxSizeInBytes = this.parseFileSize(this.maxFileSize);
+        const validFiles = newFiles.map((file) => {
+            if (!this.isFileTypeAllowed(file)) {
+                return { file, progress: 0, error: 'Invalid file type.' };
+            }
+            if (file.size > maxSizeInBytes) {
+                return { file, progress: 0, error: 'File size exceeds the limit.' };
+            }
+            return { file, progress: 0 };
+        });
+        this.files = [...this.files, ...validFiles];
+        setTimeout(() => this.forceReflow(), 0);
+        this.simulateUploadProgress(validFiles.filter((file) => !file.error));
+        this.dispatchFilesEvent(newFiles);
+    }
+    private dispatchFilesEvent(files: File[]): void {
+        const event = new CustomEvent('file-selected', {
+            detail: { files },
+            bubbles: false,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private isFileTypeAllowed(file: File): boolean {
+        return this.allowedFileTypes.includes(file.type);
+    }
+    private forceReflow(): void {
+        const progressElements = this.shadowRoot?.querySelectorAll('.progress');
+        progressElements?.forEach((el) => el.getBoundingClientRect());
+    }
+    private removeFile(index: number): void {
+        const removedFile = this.files[index];
+        this.files = this.files.filter((_, i) => i !== index);
+        const event = new CustomEvent('file-removed', {
+            detail: { removedFile },
+            bubbles: true,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private formatFileSize(size: number): string {
+        if (size < 1024) {
+            return `${size} bytes`;
+        }
+        else if (size < 1048576) {
+            return `${(size / 1024).toFixed(2)} KB`;
+        }
+        else {
+            return `${(size / 1048576).toFixed(2)} MB`;
+        }
+    }
+    private simulateUploadProgress(files: FileUploadProgress[]): void {
+        files.forEach((fileUpload) => {
+            const interval = setInterval(() => {
+                if (fileUpload.progress >= 100) {
+                    clearInterval(interval);
+                }
+                else {
+                    fileUpload.progress += 10;
+                    this.files = [...this.files];
+                }
+            }, 300);
+        });
+    }
+}
+
+```
+
+## forceReflow
+`src/components/Input/File/File`
+
+**AST Node Type:** *MethodDeclaration*
+
+#### JSDoc annotations:
+
+Forces a reflow to update progress bar rendering.
+
+```bash
+
+```
+
+#### Code:
+
+```ts
+@customElement('tds-file-input')
+export class FileInput extends LitElement {
+    static get styles() {
+        return css `
+      ${unsafeCSS(customStyles)}
+    `;
+    }
+    @property({ type: Array })
+    files: FileUploadProgress[] = [];
+    @property({ type: Boolean })
+    isDragOver = false;
+    @property({ type: String })
+    maxFileSize = '2MB';
+    @property({ type: String })
+    iconName = 'upload';
+    @property({ type: String })
+    iconState = 'default';
+    @property({ type: String })
+    headingText = 'Drag & Drop or Choose file from device';
+    @property({ type: String })
+    secondaryText = 'Max file size';
+    @property({ type: String })
+    buttonText = 'Browse file';
+    @property({ type: Array })
+    allowedFileTypes: string[] = ['application/pdf'];
+    public clearFiles(): void {
+        this.files = [];
+    }
+    private mimeTypeToLabel = mimeTypeToLabel;
+    connectedCallback() {
+        super.connectedCallback();
+        document.addEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.addEventListener('clear-file-uploads', this.handleClearFiles);
+    }
+    disconnectedCallback() {
+        document.removeEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.removeEventListener('clear-file-uploads', this.handleClearFiles);
+        super.disconnectedCallback();
+    }
+    private handleClearFiles = (): void => {
+        this.clearFiles();
+    };
+    private handleFileError = (event: CustomEvent<{
+        fileName: string;
+        error: string;
+    }>) => {
+        const { fileName, error } = event.detail;
+        console.log('Handling error for file:', fileName, 'with error:', error);
+        this.files = this.files.map((fileUpload) => fileUpload.file.name === fileName ? { ...fileUpload, error } : fileUpload);
+    };
+    render(): TemplateResult {
+        return html `
+      <div class="file-input">
+        <div class="file-upload">
+          <label>Upload Template File</label>
+          <div
+            class=${classMap({ 'drop-area': true, dragover: this.isDragOver })}
+            @dragover="${this.handleDragOver}"
+            @dragenter="${this.handleDragEnter}"
+            @dragleave="${this.handleDragLeave}"
+            @drop="${this.handleDrop}"
+            @click="${this.handleClick}"
+          >
+            <tds-icon
+              name="${this.iconName}"
+              state="${this.iconState}"
+            ></tds-icon>
+            <div class="file-text">
+              <tds-heading as="h10">
+                <strong>${this.headingText}</strong>
+              </tds-heading>
+              <p class="extra-small">
+                ${this.formatAllowedFileTypes()}, ${this.secondaryText}
+                ${this.maxFileSize}.
+              </p>
+            </div>
+            <tds-button
+              type="button"
+              variant="filled"
+              theme="light"
+              label="Button"
+              color="teal"
+              compact
+            >
+              ${this.buttonText}
+            </tds-button>
+          </div>
+        </div>
+        ${this.files.length > 0
+            ? html `
+              <div class="file-list">
+                ${this.files.map((fileUpload, index) => html `
+                    <div class="file-item">
+                      <div class="file-progress">
+                        <div class="file-name">${fileUpload.file.name}</div>
+                        <div class="file-size">
+                          ${this.formatFileSize(fileUpload.file.size)}
+                        </div>
+                        <div class="progress-bar">
+                          <div
+                            class="progress ${fileUpload.error
+                ? 'progress-error'
+                : ''}"
+                            style="
+                              --progress-width: ${fileUpload.progress}%;
+                              background-color: ${fileUpload.error
+                ? '#cd163f'
+                : fileUpload.progress === 100
+                    ? '#4caf50'
+                    : '#F7B500'};
+                            "
+                          ></div>
+                          <span class="progress-percentage">
+                            ${fileUpload.error
+                ? '0%'
+                : `${fileUpload.progress}%`}
+                          </span>
+                        </div>
+                        ${fileUpload.error
+                ? html `<div class="error-message">
+                              ${fileUpload.error}
+                            </div>`
+                : ''}
+                      </div>
+                      <tds-file-close
+                        @click="${() => this.removeFile(index)}"
+                      ></tds-file-close>
+                    </div>
+                  `)}
+              </div>
+            `
+            : ''}
+      </div>
+    `;
+    }
+    private formatAllowedFileTypes(): string {
+        const types = this.allowedFileTypes || [];
+        return types.map((type) => this.mimeTypeToLabel[type] || type).join(', ');
+    }
+    private parseFileSize(size: string): number {
+        const units: Record<string, number> = {
+            B: 1,
+            KB: 1024,
+            MB: 1024 * 1024,
+            GB: 1024 * 1024 * 1024,
+        };
+        const match = size.match(/^(\d+(?:\.\d+)?)\s*(B|KB|MB|GB)$/i);
+        if (!match)
+            throw new Error('Invalid file size format');
+        const value = parseFloat(match[1]);
+        const unit = match[2].toUpperCase();
+        return value * (units[unit] || 1);
+    }
+    private handleDragOver(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    private handleDragEnter(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = true;
+    }
+    private handleDragLeave(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = false;
+    }
+    private handleDrop(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+        this.isDragOver = false;
+        const droppedFiles = Array.from(event.dataTransfer?.files || []);
+        this.addFiles(droppedFiles);
+        this.dispatchFilesEvent(droppedFiles);
+    }
+    private handleClick(): void {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.multiple = true;
+        fileInput.accept = this.allowedFileTypes.join(',');
+        fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+        fileInput.click();
+    }
+    private handleFileSelect(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        const selectedFiles = Array.from(input.files || []);
+        this.addFiles(selectedFiles);
+        this.dispatchFilesEvent(selectedFiles);
+    }
+    private addFiles(newFiles: File[]): void {
+        const maxSizeInBytes = this.parseFileSize(this.maxFileSize);
+        const validFiles = newFiles.map((file) => {
+            if (!this.isFileTypeAllowed(file)) {
+                return { file, progress: 0, error: 'Invalid file type.' };
+            }
+            if (file.size > maxSizeInBytes) {
+                return { file, progress: 0, error: 'File size exceeds the limit.' };
+            }
+            return { file, progress: 0 };
+        });
+        this.files = [...this.files, ...validFiles];
+        setTimeout(() => this.forceReflow(), 0);
+        this.simulateUploadProgress(validFiles.filter((file) => !file.error));
+        this.dispatchFilesEvent(newFiles);
+    }
+    private dispatchFilesEvent(files: File[]): void {
+        const event = new CustomEvent('file-selected', {
+            detail: { files },
+            bubbles: false,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private isFileTypeAllowed(file: File): boolean {
+        return this.allowedFileTypes.includes(file.type);
+    }
+    private forceReflow(): void {
+        const progressElements = this.shadowRoot?.querySelectorAll('.progress');
+        progressElements?.forEach((el) => el.getBoundingClientRect());
+    }
+    private removeFile(index: number): void {
+        const removedFile = this.files[index];
+        this.files = this.files.filter((_, i) => i !== index);
+        const event = new CustomEvent('file-removed', {
+            detail: { removedFile },
+            bubbles: true,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private formatFileSize(size: number): string {
+        if (size < 1024) {
+            return `${size} bytes`;
+        }
+        else if (size < 1048576) {
+            return `${(size / 1024).toFixed(2)} KB`;
+        }
+        else {
+            return `${(size / 1048576).toFixed(2)} MB`;
+        }
+    }
+    private simulateUploadProgress(files: FileUploadProgress[]): void {
+        files.forEach((fileUpload) => {
+            const interval = setInterval(() => {
+                if (fileUpload.progress >= 100) {
+                    clearInterval(interval);
+                }
+                else {
+                    fileUpload.progress += 10;
+                    this.files = [...this.files];
+                }
+            }, 300);
+        });
+    }
+}
+
+```
+
+## removeFile
+`src/components/Input/File/File`
+
+**AST Node Type:** *MethodDeclaration*
+
+#### JSDoc annotations:
+
+Removes a file from the list of files to be uploaded and emits an event.
+
+```bash
+@param {number} index - Index of the file to remove.
+```
+
+#### Code:
+
+```ts
+@customElement('tds-file-input')
+export class FileInput extends LitElement {
+    static get styles() {
+        return css `
+      ${unsafeCSS(customStyles)}
+    `;
+    }
+    @property({ type: Array })
+    files: FileUploadProgress[] = [];
+    @property({ type: Boolean })
+    isDragOver = false;
+    @property({ type: String })
+    maxFileSize = '2MB';
+    @property({ type: String })
+    iconName = 'upload';
+    @property({ type: String })
+    iconState = 'default';
+    @property({ type: String })
+    headingText = 'Drag & Drop or Choose file from device';
+    @property({ type: String })
+    secondaryText = 'Max file size';
+    @property({ type: String })
+    buttonText = 'Browse file';
+    @property({ type: Array })
+    allowedFileTypes: string[] = ['application/pdf'];
+    public clearFiles(): void {
+        this.files = [];
+    }
+    private mimeTypeToLabel = mimeTypeToLabel;
+    connectedCallback() {
+        super.connectedCallback();
+        document.addEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.addEventListener('clear-file-uploads', this.handleClearFiles);
+    }
+    disconnectedCallback() {
+        document.removeEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.removeEventListener('clear-file-uploads', this.handleClearFiles);
+        super.disconnectedCallback();
+    }
+    private handleClearFiles = (): void => {
+        this.clearFiles();
+    };
+    private handleFileError = (event: CustomEvent<{
+        fileName: string;
+        error: string;
+    }>) => {
+        const { fileName, error } = event.detail;
+        console.log('Handling error for file:', fileName, 'with error:', error);
+        this.files = this.files.map((fileUpload) => fileUpload.file.name === fileName ? { ...fileUpload, error } : fileUpload);
+    };
+    render(): TemplateResult {
+        return html `
+      <div class="file-input">
+        <div class="file-upload">
+          <label>Upload Template File</label>
+          <div
+            class=${classMap({ 'drop-area': true, dragover: this.isDragOver })}
+            @dragover="${this.handleDragOver}"
+            @dragenter="${this.handleDragEnter}"
+            @dragleave="${this.handleDragLeave}"
+            @drop="${this.handleDrop}"
+            @click="${this.handleClick}"
+          >
+            <tds-icon
+              name="${this.iconName}"
+              state="${this.iconState}"
+            ></tds-icon>
+            <div class="file-text">
+              <tds-heading as="h10">
+                <strong>${this.headingText}</strong>
+              </tds-heading>
+              <p class="extra-small">
+                ${this.formatAllowedFileTypes()}, ${this.secondaryText}
+                ${this.maxFileSize}.
+              </p>
+            </div>
+            <tds-button
+              type="button"
+              variant="filled"
+              theme="light"
+              label="Button"
+              color="teal"
+              compact
+            >
+              ${this.buttonText}
+            </tds-button>
+          </div>
+        </div>
+        ${this.files.length > 0
+            ? html `
+              <div class="file-list">
+                ${this.files.map((fileUpload, index) => html `
+                    <div class="file-item">
+                      <div class="file-progress">
+                        <div class="file-name">${fileUpload.file.name}</div>
+                        <div class="file-size">
+                          ${this.formatFileSize(fileUpload.file.size)}
+                        </div>
+                        <div class="progress-bar">
+                          <div
+                            class="progress ${fileUpload.error
+                ? 'progress-error'
+                : ''}"
+                            style="
+                              --progress-width: ${fileUpload.progress}%;
+                              background-color: ${fileUpload.error
+                ? '#cd163f'
+                : fileUpload.progress === 100
+                    ? '#4caf50'
+                    : '#F7B500'};
+                            "
+                          ></div>
+                          <span class="progress-percentage">
+                            ${fileUpload.error
+                ? '0%'
+                : `${fileUpload.progress}%`}
+                          </span>
+                        </div>
+                        ${fileUpload.error
+                ? html `<div class="error-message">
+                              ${fileUpload.error}
+                            </div>`
+                : ''}
+                      </div>
+                      <tds-file-close
+                        @click="${() => this.removeFile(index)}"
+                      ></tds-file-close>
+                    </div>
+                  `)}
+              </div>
+            `
+            : ''}
+      </div>
+    `;
+    }
+    private formatAllowedFileTypes(): string {
+        const types = this.allowedFileTypes || [];
+        return types.map((type) => this.mimeTypeToLabel[type] || type).join(', ');
+    }
+    private parseFileSize(size: string): number {
+        const units: Record<string, number> = {
+            B: 1,
+            KB: 1024,
+            MB: 1024 * 1024,
+            GB: 1024 * 1024 * 1024,
+        };
+        const match = size.match(/^(\d+(?:\.\d+)?)\s*(B|KB|MB|GB)$/i);
+        if (!match)
+            throw new Error('Invalid file size format');
+        const value = parseFloat(match[1]);
+        const unit = match[2].toUpperCase();
+        return value * (units[unit] || 1);
+    }
+    private handleDragOver(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    private handleDragEnter(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = true;
+    }
+    private handleDragLeave(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = false;
+    }
+    private handleDrop(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+        this.isDragOver = false;
+        const droppedFiles = Array.from(event.dataTransfer?.files || []);
+        this.addFiles(droppedFiles);
+        this.dispatchFilesEvent(droppedFiles);
+    }
+    private handleClick(): void {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.multiple = true;
+        fileInput.accept = this.allowedFileTypes.join(',');
+        fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+        fileInput.click();
+    }
+    private handleFileSelect(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        const selectedFiles = Array.from(input.files || []);
+        this.addFiles(selectedFiles);
+        this.dispatchFilesEvent(selectedFiles);
+    }
+    private addFiles(newFiles: File[]): void {
+        const maxSizeInBytes = this.parseFileSize(this.maxFileSize);
+        const validFiles = newFiles.map((file) => {
+            if (!this.isFileTypeAllowed(file)) {
+                return { file, progress: 0, error: 'Invalid file type.' };
+            }
+            if (file.size > maxSizeInBytes) {
+                return { file, progress: 0, error: 'File size exceeds the limit.' };
+            }
+            return { file, progress: 0 };
+        });
+        this.files = [...this.files, ...validFiles];
+        setTimeout(() => this.forceReflow(), 0);
+        this.simulateUploadProgress(validFiles.filter((file) => !file.error));
+        this.dispatchFilesEvent(newFiles);
+    }
+    private dispatchFilesEvent(files: File[]): void {
+        const event = new CustomEvent('file-selected', {
+            detail: { files },
+            bubbles: false,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private isFileTypeAllowed(file: File): boolean {
+        return this.allowedFileTypes.includes(file.type);
+    }
+    private forceReflow(): void {
+        const progressElements = this.shadowRoot?.querySelectorAll('.progress');
+        progressElements?.forEach((el) => el.getBoundingClientRect());
+    }
+    private removeFile(index: number): void {
+        const removedFile = this.files[index];
+        this.files = this.files.filter((_, i) => i !== index);
+        const event = new CustomEvent('file-removed', {
+            detail: { removedFile },
+            bubbles: true,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private formatFileSize(size: number): string {
+        if (size < 1024) {
+            return `${size} bytes`;
+        }
+        else if (size < 1048576) {
+            return `${(size / 1024).toFixed(2)} KB`;
+        }
+        else {
+            return `${(size / 1048576).toFixed(2)} MB`;
+        }
+    }
+    private simulateUploadProgress(files: FileUploadProgress[]): void {
+        files.forEach((fileUpload) => {
+            const interval = setInterval(() => {
+                if (fileUpload.progress >= 100) {
+                    clearInterval(interval);
+                }
+                else {
+                    fileUpload.progress += 10;
+                    this.files = [...this.files];
+                }
+            }, 300);
+        });
+    }
+}
+
+```
+
+## formatFileSize
+`src/components/Input/File/File`
+
+**AST Node Type:** *MethodDeclaration*
+
+#### JSDoc annotations:
+
+Formats the file size for display.
+
+```bash
+@param {number} size - File size in bytes.
+
+@returns {string} - Formatted file size as a string.
+```
+
+#### Code:
+
+```ts
+@customElement('tds-file-input')
+export class FileInput extends LitElement {
+    static get styles() {
+        return css `
+      ${unsafeCSS(customStyles)}
+    `;
+    }
+    @property({ type: Array })
+    files: FileUploadProgress[] = [];
+    @property({ type: Boolean })
+    isDragOver = false;
+    @property({ type: String })
+    maxFileSize = '2MB';
+    @property({ type: String })
+    iconName = 'upload';
+    @property({ type: String })
+    iconState = 'default';
+    @property({ type: String })
+    headingText = 'Drag & Drop or Choose file from device';
+    @property({ type: String })
+    secondaryText = 'Max file size';
+    @property({ type: String })
+    buttonText = 'Browse file';
+    @property({ type: Array })
+    allowedFileTypes: string[] = ['application/pdf'];
+    public clearFiles(): void {
+        this.files = [];
+    }
+    private mimeTypeToLabel = mimeTypeToLabel;
+    connectedCallback() {
+        super.connectedCallback();
+        document.addEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.addEventListener('clear-file-uploads', this.handleClearFiles);
+    }
+    disconnectedCallback() {
+        document.removeEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.removeEventListener('clear-file-uploads', this.handleClearFiles);
+        super.disconnectedCallback();
+    }
+    private handleClearFiles = (): void => {
+        this.clearFiles();
+    };
+    private handleFileError = (event: CustomEvent<{
+        fileName: string;
+        error: string;
+    }>) => {
+        const { fileName, error } = event.detail;
+        console.log('Handling error for file:', fileName, 'with error:', error);
+        this.files = this.files.map((fileUpload) => fileUpload.file.name === fileName ? { ...fileUpload, error } : fileUpload);
+    };
+    render(): TemplateResult {
+        return html `
+      <div class="file-input">
+        <div class="file-upload">
+          <label>Upload Template File</label>
+          <div
+            class=${classMap({ 'drop-area': true, dragover: this.isDragOver })}
+            @dragover="${this.handleDragOver}"
+            @dragenter="${this.handleDragEnter}"
+            @dragleave="${this.handleDragLeave}"
+            @drop="${this.handleDrop}"
+            @click="${this.handleClick}"
+          >
+            <tds-icon
+              name="${this.iconName}"
+              state="${this.iconState}"
+            ></tds-icon>
+            <div class="file-text">
+              <tds-heading as="h10">
+                <strong>${this.headingText}</strong>
+              </tds-heading>
+              <p class="extra-small">
+                ${this.formatAllowedFileTypes()}, ${this.secondaryText}
+                ${this.maxFileSize}.
+              </p>
+            </div>
+            <tds-button
+              type="button"
+              variant="filled"
+              theme="light"
+              label="Button"
+              color="teal"
+              compact
+            >
+              ${this.buttonText}
+            </tds-button>
+          </div>
+        </div>
+        ${this.files.length > 0
+            ? html `
+              <div class="file-list">
+                ${this.files.map((fileUpload, index) => html `
+                    <div class="file-item">
+                      <div class="file-progress">
+                        <div class="file-name">${fileUpload.file.name}</div>
+                        <div class="file-size">
+                          ${this.formatFileSize(fileUpload.file.size)}
+                        </div>
+                        <div class="progress-bar">
+                          <div
+                            class="progress ${fileUpload.error
+                ? 'progress-error'
+                : ''}"
+                            style="
+                              --progress-width: ${fileUpload.progress}%;
+                              background-color: ${fileUpload.error
+                ? '#cd163f'
+                : fileUpload.progress === 100
+                    ? '#4caf50'
+                    : '#F7B500'};
+                            "
+                          ></div>
+                          <span class="progress-percentage">
+                            ${fileUpload.error
+                ? '0%'
+                : `${fileUpload.progress}%`}
+                          </span>
+                        </div>
+                        ${fileUpload.error
+                ? html `<div class="error-message">
+                              ${fileUpload.error}
+                            </div>`
+                : ''}
+                      </div>
+                      <tds-file-close
+                        @click="${() => this.removeFile(index)}"
+                      ></tds-file-close>
+                    </div>
+                  `)}
+              </div>
+            `
+            : ''}
+      </div>
+    `;
+    }
+    private formatAllowedFileTypes(): string {
+        const types = this.allowedFileTypes || [];
+        return types.map((type) => this.mimeTypeToLabel[type] || type).join(', ');
+    }
+    private parseFileSize(size: string): number {
+        const units: Record<string, number> = {
+            B: 1,
+            KB: 1024,
+            MB: 1024 * 1024,
+            GB: 1024 * 1024 * 1024,
+        };
+        const match = size.match(/^(\d+(?:\.\d+)?)\s*(B|KB|MB|GB)$/i);
+        if (!match)
+            throw new Error('Invalid file size format');
+        const value = parseFloat(match[1]);
+        const unit = match[2].toUpperCase();
+        return value * (units[unit] || 1);
+    }
+    private handleDragOver(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    private handleDragEnter(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = true;
+    }
+    private handleDragLeave(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = false;
+    }
+    private handleDrop(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+        this.isDragOver = false;
+        const droppedFiles = Array.from(event.dataTransfer?.files || []);
+        this.addFiles(droppedFiles);
+        this.dispatchFilesEvent(droppedFiles);
+    }
+    private handleClick(): void {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.multiple = true;
+        fileInput.accept = this.allowedFileTypes.join(',');
+        fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+        fileInput.click();
+    }
+    private handleFileSelect(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        const selectedFiles = Array.from(input.files || []);
+        this.addFiles(selectedFiles);
+        this.dispatchFilesEvent(selectedFiles);
+    }
+    private addFiles(newFiles: File[]): void {
+        const maxSizeInBytes = this.parseFileSize(this.maxFileSize);
+        const validFiles = newFiles.map((file) => {
+            if (!this.isFileTypeAllowed(file)) {
+                return { file, progress: 0, error: 'Invalid file type.' };
+            }
+            if (file.size > maxSizeInBytes) {
+                return { file, progress: 0, error: 'File size exceeds the limit.' };
+            }
+            return { file, progress: 0 };
+        });
+        this.files = [...this.files, ...validFiles];
+        setTimeout(() => this.forceReflow(), 0);
+        this.simulateUploadProgress(validFiles.filter((file) => !file.error));
+        this.dispatchFilesEvent(newFiles);
+    }
+    private dispatchFilesEvent(files: File[]): void {
+        const event = new CustomEvent('file-selected', {
+            detail: { files },
+            bubbles: false,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private isFileTypeAllowed(file: File): boolean {
+        return this.allowedFileTypes.includes(file.type);
+    }
+    private forceReflow(): void {
+        const progressElements = this.shadowRoot?.querySelectorAll('.progress');
+        progressElements?.forEach((el) => el.getBoundingClientRect());
+    }
+    private removeFile(index: number): void {
+        const removedFile = this.files[index];
+        this.files = this.files.filter((_, i) => i !== index);
+        const event = new CustomEvent('file-removed', {
+            detail: { removedFile },
+            bubbles: true,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private formatFileSize(size: number): string {
+        if (size < 1024) {
+            return `${size} bytes`;
+        }
+        else if (size < 1048576) {
+            return `${(size / 1024).toFixed(2)} KB`;
+        }
+        else {
+            return `${(size / 1048576).toFixed(2)} MB`;
+        }
+    }
+    private simulateUploadProgress(files: FileUploadProgress[]): void {
+        files.forEach((fileUpload) => {
+            const interval = setInterval(() => {
+                if (fileUpload.progress >= 100) {
+                    clearInterval(interval);
+                }
+                else {
+                    fileUpload.progress += 10;
+                    this.files = [...this.files];
+                }
+            }, 300);
+        });
+    }
+}
+
+```
+
+## simulateUploadProgress
+`src/components/Input/File/File`
+
+**AST Node Type:** *MethodDeclaration*
+
+#### JSDoc annotations:
+
+Simulates the upload progress for the provided files.
+
+```bash
+@param {FileUploadProgress[]} files - Files for which to simulate upload progress.
+```
+
+#### Code:
+
+```ts
+@customElement('tds-file-input')
+export class FileInput extends LitElement {
+    static get styles() {
+        return css `
+      ${unsafeCSS(customStyles)}
+    `;
+    }
+    @property({ type: Array })
+    files: FileUploadProgress[] = [];
+    @property({ type: Boolean })
+    isDragOver = false;
+    @property({ type: String })
+    maxFileSize = '2MB';
+    @property({ type: String })
+    iconName = 'upload';
+    @property({ type: String })
+    iconState = 'default';
+    @property({ type: String })
+    headingText = 'Drag & Drop or Choose file from device';
+    @property({ type: String })
+    secondaryText = 'Max file size';
+    @property({ type: String })
+    buttonText = 'Browse file';
+    @property({ type: Array })
+    allowedFileTypes: string[] = ['application/pdf'];
+    public clearFiles(): void {
+        this.files = [];
+    }
+    private mimeTypeToLabel = mimeTypeToLabel;
+    connectedCallback() {
+        super.connectedCallback();
+        document.addEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.addEventListener('clear-file-uploads', this.handleClearFiles);
+    }
+    disconnectedCallback() {
+        document.removeEventListener('file-upload-error', this.handleFileError as EventListener);
+        this.removeEventListener('clear-file-uploads', this.handleClearFiles);
+        super.disconnectedCallback();
+    }
+    private handleClearFiles = (): void => {
+        this.clearFiles();
+    };
+    private handleFileError = (event: CustomEvent<{
+        fileName: string;
+        error: string;
+    }>) => {
+        const { fileName, error } = event.detail;
+        console.log('Handling error for file:', fileName, 'with error:', error);
+        this.files = this.files.map((fileUpload) => fileUpload.file.name === fileName ? { ...fileUpload, error } : fileUpload);
+    };
+    render(): TemplateResult {
+        return html `
+      <div class="file-input">
+        <div class="file-upload">
+          <label>Upload Template File</label>
+          <div
+            class=${classMap({ 'drop-area': true, dragover: this.isDragOver })}
+            @dragover="${this.handleDragOver}"
+            @dragenter="${this.handleDragEnter}"
+            @dragleave="${this.handleDragLeave}"
+            @drop="${this.handleDrop}"
+            @click="${this.handleClick}"
+          >
+            <tds-icon
+              name="${this.iconName}"
+              state="${this.iconState}"
+            ></tds-icon>
+            <div class="file-text">
+              <tds-heading as="h10">
+                <strong>${this.headingText}</strong>
+              </tds-heading>
+              <p class="extra-small">
+                ${this.formatAllowedFileTypes()}, ${this.secondaryText}
+                ${this.maxFileSize}.
+              </p>
+            </div>
+            <tds-button
+              type="button"
+              variant="filled"
+              theme="light"
+              label="Button"
+              color="teal"
+              compact
+            >
+              ${this.buttonText}
+            </tds-button>
+          </div>
+        </div>
+        ${this.files.length > 0
+            ? html `
+              <div class="file-list">
+                ${this.files.map((fileUpload, index) => html `
+                    <div class="file-item">
+                      <div class="file-progress">
+                        <div class="file-name">${fileUpload.file.name}</div>
+                        <div class="file-size">
+                          ${this.formatFileSize(fileUpload.file.size)}
+                        </div>
+                        <div class="progress-bar">
+                          <div
+                            class="progress ${fileUpload.error
+                ? 'progress-error'
+                : ''}"
+                            style="
+                              --progress-width: ${fileUpload.progress}%;
+                              background-color: ${fileUpload.error
+                ? '#cd163f'
+                : fileUpload.progress === 100
+                    ? '#4caf50'
+                    : '#F7B500'};
+                            "
+                          ></div>
+                          <span class="progress-percentage">
+                            ${fileUpload.error
+                ? '0%'
+                : `${fileUpload.progress}%`}
+                          </span>
+                        </div>
+                        ${fileUpload.error
+                ? html `<div class="error-message">
+                              ${fileUpload.error}
+                            </div>`
+                : ''}
+                      </div>
+                      <tds-file-close
+                        @click="${() => this.removeFile(index)}"
+                      ></tds-file-close>
+                    </div>
+                  `)}
+              </div>
+            `
+            : ''}
+      </div>
+    `;
+    }
+    private formatAllowedFileTypes(): string {
+        const types = this.allowedFileTypes || [];
+        return types.map((type) => this.mimeTypeToLabel[type] || type).join(', ');
+    }
+    private parseFileSize(size: string): number {
+        const units: Record<string, number> = {
+            B: 1,
+            KB: 1024,
+            MB: 1024 * 1024,
+            GB: 1024 * 1024 * 1024,
+        };
+        const match = size.match(/^(\d+(?:\.\d+)?)\s*(B|KB|MB|GB)$/i);
+        if (!match)
+            throw new Error('Invalid file size format');
+        const value = parseFloat(match[1]);
+        const unit = match[2].toUpperCase();
+        return value * (units[unit] || 1);
+    }
+    private handleDragOver(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    private handleDragEnter(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = true;
+    }
+    private handleDragLeave(event: DragEvent): void {
+        event.preventDefault();
+        this.isDragOver = false;
+    }
+    private handleDrop(event: DragEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+        this.isDragOver = false;
+        const droppedFiles = Array.from(event.dataTransfer?.files || []);
+        this.addFiles(droppedFiles);
+        this.dispatchFilesEvent(droppedFiles);
+    }
+    private handleClick(): void {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.multiple = true;
+        fileInput.accept = this.allowedFileTypes.join(',');
+        fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+        fileInput.click();
+    }
+    private handleFileSelect(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        const selectedFiles = Array.from(input.files || []);
+        this.addFiles(selectedFiles);
+        this.dispatchFilesEvent(selectedFiles);
+    }
+    private addFiles(newFiles: File[]): void {
+        const maxSizeInBytes = this.parseFileSize(this.maxFileSize);
+        const validFiles = newFiles.map((file) => {
+            if (!this.isFileTypeAllowed(file)) {
+                return { file, progress: 0, error: 'Invalid file type.' };
+            }
+            if (file.size > maxSizeInBytes) {
+                return { file, progress: 0, error: 'File size exceeds the limit.' };
+            }
+            return { file, progress: 0 };
+        });
+        this.files = [...this.files, ...validFiles];
+        setTimeout(() => this.forceReflow(), 0);
+        this.simulateUploadProgress(validFiles.filter((file) => !file.error));
+        this.dispatchFilesEvent(newFiles);
+    }
+    private dispatchFilesEvent(files: File[]): void {
+        const event = new CustomEvent('file-selected', {
+            detail: { files },
+            bubbles: false,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private isFileTypeAllowed(file: File): boolean {
+        return this.allowedFileTypes.includes(file.type);
+    }
+    private forceReflow(): void {
+        const progressElements = this.shadowRoot?.querySelectorAll('.progress');
+        progressElements?.forEach((el) => el.getBoundingClientRect());
+    }
+    private removeFile(index: number): void {
+        const removedFile = this.files[index];
+        this.files = this.files.filter((_, i) => i !== index);
+        const event = new CustomEvent('file-removed', {
+            detail: { removedFile },
+            bubbles: true,
+            composed: true,
+        });
+        this.dispatchEvent(event);
+    }
+    private formatFileSize(size: number): string {
+        if (size < 1024) {
+            return `${size} bytes`;
+        }
+        else if (size < 1048576) {
+            return `${(size / 1024).toFixed(2)} KB`;
+        }
+        else {
+            return `${(size / 1048576).toFixed(2)} MB`;
+        }
+    }
+    private simulateUploadProgress(files: FileUploadProgress[]): void {
+        files.forEach((fileUpload) => {
+            const interval = setInterval(() => {
+                if (fileUpload.progress >= 100) {
+                    clearInterval(interval);
+                }
+                else {
+                    fileUpload.progress += 10;
+                    this.files = [...this.files];
+                }
+            }, 300);
+        });
+    }
+}
+
+```
+

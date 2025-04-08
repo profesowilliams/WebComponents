@@ -1,7 +1,7 @@
-// src/components/Lit/Notification/NotificationLink/NotificationLink.tsx
-import { LitElement, html, css, unsafeCSS ,PropertyValues } from "lit";
+// src/components/Notification/NotificationLink/NotificationLink.tsx
+import { LitElement, html, css, unsafeCSS, PropertyValues } from 'lit';
 import { property } from 'lit/decorators.js';
-import customStyles from "./NotificationLink.scss?inline";
+import customStyles from './NotificationLink.scss?inline';
 import '../../Button';
 
 export class NotificationLink extends LitElement {
@@ -45,4 +45,4 @@ export class NotificationLink extends LitElement {
   }
 }
 
-customElements.define("tds-notification-link", NotificationLink);
+customElements.define('tds-notification-link', NotificationLink);

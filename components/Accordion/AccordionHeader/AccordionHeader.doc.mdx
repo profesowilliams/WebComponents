@@ -1,0 +1,86 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="src/components/Accordion/AccordionHeader/AccordionHeader" />
+
+## AccordionHeader
+`src/components/Accordion/AccordionHeader/AccordionHeader`
+
+**AST Node Type:** *ClassDeclaration*
+
+#### JSDoc annotations:
+
+AccordonHeader is a custom web component that defines the header section of an accordion.
+
+```bash
+@element tds-accordion-header
+```
+
+#### Code:
+
+```ts
+export class AccordionHeader extends LitElement {
+    static get styles() {
+        return css `
+      /* Add any styles for the accordion header here */
+    `;
+    }
+    render() {
+        return html `<div class="accordion-header"><slot></slot></div>`;
+    }
+}
+
+```
+
+## 
+**AST Node Type:** *GetAccessor*
+
+#### JSDoc annotations:
+
+Defines the CSS styles for the component.
+
+```bash
+
+```
+
+#### Code:
+
+```ts
+get;
+styles();
+{
+    return css `
+      /* Add any styles for the accordion header here */
+    `;
+}
+
+```
+
+## render
+`src/components/Accordion/AccordionHeader/AccordionHeader`
+
+**AST Node Type:** *MethodDeclaration*
+
+#### JSDoc annotations:
+
+Renders the HTML template for the component.
+
+```bash
+@returns {TemplateResult} The rendered HTML template.
+```
+
+#### Code:
+
+```ts
+export class AccordionHeader extends LitElement {
+    static get styles() {
+        return css `
+      /* Add any styles for the accordion header here */
+    `;
+    }
+    render() {
+        return html `<div class="accordion-header"><slot></slot></div>`;
+    }
+}
+
+```
+

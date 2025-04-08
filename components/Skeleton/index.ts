@@ -1,2 +1,2 @@
-// src/components/Lit/Skeleton/index.ts
+// src/components/Skeleton/index.ts
 export * from './Skeleton';

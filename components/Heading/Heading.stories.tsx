@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/web-components';
 import { html, TemplateResult } from 'lit';
-import './Heading'; // Ensure this path is correct
+import './Heading';
 
 interface HeadingArgs {
   as: string;

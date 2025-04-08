@@ -1,4 +1,4 @@
-// src/components/Lit/Modal.tsx
+// src/components/Modal.tsx
 import { LitElement, html, css, unsafeCSS, PropertyValues } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
 import { property } from 'lit/decorators.js';
@@ -35,7 +35,7 @@ export class Modal extends LitElement {
     'bottom-left': 'bottom-0 start-0',
     'bottom-center': 'bottom-0 start-50 translate-middle-x',
     'bottom-right': 'bottom-0 end-0',
-    'inline': 'modal-dialog-inline position-absolute bottom-0 end-0 m-0',
+    inline: 'modal-dialog-inline position-absolute bottom-0 end-0 m-0',
   };
 
   static get placementOptions() {

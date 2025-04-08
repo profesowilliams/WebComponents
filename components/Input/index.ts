@@ -1,4 +1,4 @@
-// src/components/Lit/Input/index.ts
+// src/components/Input/index.ts
 export * from './Input';
 export * from './Checkbox';
 export * from './Dropdown';

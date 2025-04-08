@@ -1,2 +1,2 @@
-// src/components/Lit/Dropdown/index.ts
+// src/components/Dropdown/index.ts
 export { Dropdown } from './Dropdown';

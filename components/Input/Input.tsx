@@ -42,6 +42,7 @@ export class Input extends LitElement {
   @property({ type: Boolean }) indeterminate = false;
   @property({ type: Boolean }) disabled = false;
   @property({ type: Boolean }) required = false;
+  @property({ type: String }) value = '';
   @property({ type: String }) pattern = '';
 
   render() {
@@ -58,167 +59,29 @@ export class Input extends LitElement {
         this.type,
         [
           ['hidden', () => HiddenInput(this.id, attrs)],
-          [
-            'text',
-            () =>
-              html`<tds-textfield
-                id="${this.id}"
-                type="text"
-                placeholder="${this.placeholder}"
-                label="${this.label}"
-                ?required=${this.required}
-                ?disabled=${this.disabled}
-                .attrs="${attrs}"
-              ></tds-textfield>`,
-          ],
-          [
-            'dropdown',
-            () =>
-              html`<tds-dropdown
-                id="${this.id}"
-                type="text"
-                placeholder="${this.placeholder}"
-                label="${this.label}"
-                ?required=${this.required}
-                ?disabled=${this.disabled}
-                .attrs="${attrs}"
-              ></tds-dropdown>`,
-          ],
-          [
-            'search',
-            () => SearchInput(this.id, this.placeholder, this.label, attrs),
-          ],
-          [
-            'tel',
-            () =>
-              html`<tds-textfield
-                id="${this.id}"
-                type="tel"
-                placeholder="${this.placeholder}"
-                label="${this.label}"
-                pattern="${this.pattern}"
-                .attrs="${attrs}"
-              ></tds-textfield>`,
-          ],
-          [
-            'url',
-            () =>
-              html`<tds-textfield
-                id="${this.id}"
-                type="url"
-                placeholder="${this.placeholder}"
-                label="${this.label}"
-                .attrs="${attrs}"
-              ></tds-textfield>`,
-          ],
-          [
-            'email',
-            () =>
-              html`<tds-textfield
-                id="${this.id}"
-                type="email"
-                placeholder="${this.placeholder}"
-                label="${this.label}"
-                .attrs="${attrs}"
-              ></tds-textfield>`,
-          ],
-          [
-            'password',
-            () =>
-              html`<tds-textfield
-                id="${this.id}"
-                type="password"
-                placeholder="${this.placeholder}"
-                label="${this.label}"
-                .attrs="${attrs}"
-              ></tds-textfield>`,
-          ],
-          [
-            'datetime',
-            () => DatetimeInput(this.id, this.placeholder, this.label, attrs),
-          ],
-          [
-            'date',
-            () => DateInput(this.id, this.placeholder, this.label, attrs),
-          ],
-          [
-            'month',
-            () => MonthInput(this.id, this.placeholder, this.label, attrs),
-          ],
-          [
-            'week',
-            () => WeekInput(this.id, this.placeholder, this.label, attrs),
-          ],
-          [
-            'time',
-            () => TimeInput(this.id, this.placeholder, this.label, attrs),
-          ],
-          [
-            'datetime-local',
-            () =>
-              DatetimeLocalInput(this.id, this.placeholder, this.label, attrs),
-          ],
-          [
-            'number',
-            () =>
-              html`<tds-textfield
-                id="${this.id}"
-                type="number"
-                placeholder="${this.placeholder}"
-                label="${this.label}"
-                .attrs="${attrs}"
-              ></tds-textfield>`,
-          ],
-          [
-            'range',
-            () => RangeInput(this.id, this.placeholder, this.label, attrs),
-          ],
-          [
-            'color',
-            () => ColorInput(this.id, this.placeholder, this.label, attrs),
-          ],
-          [
-            'checkbox',
-            () =>
-              html`<tds-checkbox
-                id="${this.id}"
-                type="text"
-                label="${this.label}"
-                ?checked=${this.checked}
-                ?indeterminate=${this.indeterminate}
-                ?disabled=${this.disabled}
-                .attrs="${attrs}"
-              ></tds-checkbox>`,
-          ],
-          [
-            'radio',
-            () =>
-              html`<tds-radio
-                id="${this.id}"
-                type="text"
-                label="${this.label}"
-                ?checked=${this.checked}
-                ?disabled=${this.disabled}
-                .attrs="${attrs}"
-              ></tds-radio>`,
-          ],
+          ['text', () => html`<tds-textfield id="${this.id}" type="text" placeholder="${this.placeholder}" label="${this.label}" ?required=${this.required} ?disabled=${this.disabled} .value="${this.value}" .attrs="${attrs}"></tds-textfield>`],
+          ['dropdown', () => html`<tds-dropdown id="${this.id}" type="text" placeholder="${this.placeholder}" label="${this.label}" ?required=${this.required} ?disabled=${this.disabled} .value="${this.value}" .attrs="${attrs}"></tds-dropdown>`],
+          ['search', () => SearchInput(this.id, this.placeholder, this.label, attrs)],
+          ['tel', () => html`<tds-textfield id="${this.id}" type="tel" placeholder="${this.placeholder}" label="${this.label}" pattern="${this.pattern}" .attrs="${attrs}"></tds-textfield>`],
+          ['url', () => html`<tds-textfield id="${this.id}" type="url" placeholder="${this.placeholder}" label="${this.label}" .attrs="${attrs}"></tds-textfield>`],
+          ['email', () => html`<tds-textfield id="${this.id}" type="email" placeholder="${this.placeholder}" label="${this.label}" .attrs="${attrs}"></tds-textfield>`],
+          ['password', () => html`<tds-textfield id="${this.id}" type="password" placeholder="${this.placeholder}" label="${this.label}" .attrs="${attrs}"></tds-textfield>`],
+          ['datetime', () => DatetimeInput(this.id, this.placeholder, this.label, attrs)],
+          ['date', () => DateInput(this.id, this.placeholder, this.label, attrs)],
+          ['month', () => MonthInput(this.id, this.placeholder, this.label, attrs)],
+          ['week', () => WeekInput(this.id, this.placeholder, this.label, attrs)],
+          ['time', () => TimeInput(this.id, this.placeholder, this.label, attrs)],
+          ['datetime-local', () => DatetimeLocalInput(this.id, this.placeholder, this.label, attrs)],
+          ['number', () => html`<tds-textfield id="${this.id}" type="number" placeholder="${this.placeholder}" label="${this.label}" .attrs="${attrs}"></tds-textfield>`],
+          ['range', () => RangeInput(this.id, this.placeholder, this.label, attrs)],
+          ['color', () => ColorInput(this.id, this.placeholder, this.label, attrs)],
+          ['checkbox', () => html`<tds-checkbox id="${this.id}" type="text" label="${this.label}" ?checked=${this.checked} ?indeterminate=${this.indeterminate} ?disabled=${this.disabled} .attrs="${attrs}"></tds-checkbox>`],
+          ['radio', () => html`<tds-radio id="${this.id}" type="text" label="${this.label}" ?checked=${this.checked} ?disabled=${this.disabled} .attrs="${attrs}"></tds-radio>`],
           ['file', () => html`<tds-file-input></tds-file-input>`],
-          [
-            'submit',
-            () => SubmitInput(this.id, this.placeholder, this.label, attrs),
-          ],
-          [
-            'image',
-            () => ImageInput(this.id, this.placeholder, this.label, attrs),
-          ],
-          [
-            'reset',
-            () => ResetInput(this.id, this.placeholder, this.label, attrs),
-          ],
-          [
-            'button',
-            () => ButtonInput(this.id, this.placeholder, this.label, attrs),
-          ],
+          ['submit', () => SubmitInput(this.id, this.placeholder, this.label, attrs)],
+          ['image', () => ImageInput(this.id, this.placeholder, this.label, attrs)],
+          ['reset', () => ResetInput(this.id, this.placeholder, this.label, attrs)],
+          ['button', () => ButtonInput(this.id, this.placeholder, this.label, attrs)],
         ],
         () => html`<h1>Unsupported input type</h1>`
       )}

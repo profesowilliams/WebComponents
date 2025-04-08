@@ -1,2 +1,2 @@
-// src/components/Lit/Modal/ModalFooter/index.ts
+// src/components/Modal/ModalFooter/index.ts
 export { ModalClose } from './ModalClose';

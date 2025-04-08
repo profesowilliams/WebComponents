@@ -1,55 +1,9 @@
-import { Meta, Typeset } from '@storybook/blocks';
+# tds-heading
 
-<Meta title="Heading" />
+## Properties
 
-export const heading = {
-  type: {
-    primary: 'Arial, sans-serif',
-  },
-  weight: {
-    regular: '400',
-    bold: '700',
-    extrabold: '800',
-    black: '900',
-  },
-  size: {
-    h0: 0,
-    h1: 1,
-    h2: 2,
-    h3: 3,
-    h4: 4,
-    h5: 5,
-    h6: 6,
-    h7: 7,
-    h8: 8,
-    h9: 9,
-    h10: 10,
-  },
-};
-
-export const SampleText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
-
-# Typography
-
-**Font:** Arial
-
-**Weights:** 400(regular), 700(bold)
-
-<Typeset
-  fontSizes={[
-    Number(heading.size.h0),
-    Number(heading.size.h1),
-    Number(heading.size.h2),
-    Number(heading.size.h3),
-    Number(heading.size.h4),
-    Number(heading.size.h5),
-    Number(heading.size.h6),
-    Number(heading.size.h7),
-    Number(heading.size.h8),
-    Number(heading.size.h9),
-    Number(heading.size.h10),
-  ]}
-  fontWeight={heading.weight.black}
-  sampleText={SampleText}
-  fontFamily={heading.type.primary}
-/>
+| Property | Attribute | Type                  | Default |
+|----------|-----------|-----------------------|---------|
+| `as`     | `as`      | `string`              | "h2"    |
+| `color`  | `color`   | `string \| undefined` |         |
+| `size`   | `size`    | `string \| undefined` |         |

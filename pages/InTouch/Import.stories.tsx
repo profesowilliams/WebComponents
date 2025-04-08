@@ -1,13 +1,8 @@
-import '../../../components/Lit/Flyout';
-import '../../../components/Lit/Flyout/FlyoutHeader';
-import '../../../components/Lit/Flyout/FlyoutBody';
-import '../../../components/Lit/Flyout/FlyoutFooter';
-import '../../../components/Lit/Flyout/FlyoutButton';
-import '../../../components/Lit/Heading';
-import '../../../components/Lit/Notification';
-import '../../../components/Lit/Input';
-import '../../../components/Lit/Input/Dropdown';
-import '../../../components/Lit/Icon';
+import '../../components/Flyout';
+import '../../components/Heading';
+import '../../components/Notification';
+import '../../components/Input';
+import '../../components/Icon';
 import customStyles from './Import.scss?inline';
 
 export default {

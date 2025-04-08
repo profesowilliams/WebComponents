@@ -1,2 +1,2 @@
-// src/components/Lit/Accordion/AccordionItem/index.ts
-export { AccordionItem } from "./AccordionItem";
+// src/components/Accordion/AccordionItem/index.ts
+export { AccordionItem } from './AccordionItem';

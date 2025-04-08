@@ -1,4 +1,4 @@
-// src/components/Lit/Toast/index.ts
+// src/components/Toast/index.ts
 export * from './Toast';
 export * from './ToastBody';
 export * from './ToastClose';

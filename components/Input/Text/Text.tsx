@@ -43,10 +43,10 @@ export class TextInput extends LitElement {
     | 'reset'
     | 'button' = 'email';
   @property({ type: String }) id = 'floatingInput';
-  @property({ type: String }) supporttext?: string;
-  @property({ type: String }) errormessage?: string;
+  @property({ type: String, reflect: true }) supporttext?: string;
+  @property({ type: String, reflect: true }) errormessage?: string;
   @property({ type: Boolean }) required = false;
-  @property({ type: Boolean }) disabled = false; // Add disabled property
+  @property({ type: Boolean, reflect: true }) disabled = false; // Add disabled property
   @property({ type: String }) pattern = '';
   @property({ type: Number }) minLength?: number;
   @property({ type: Number }) maxLength?: number;

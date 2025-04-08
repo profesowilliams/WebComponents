@@ -1,0 +1,600 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="src/components/Flyout/Flyout" />
+
+## Flyout
+`src/components/Flyout/Flyout`
+
+**AST Node Type:** *ClassDeclaration*
+
+#### JSDoc annotations:
+
+A Flyout component that renders an offcanvas-style element with configurable
+title, backdrop, size, and placement options.
+
+```bash
+@element tds-flyout
+```
+
+#### Code:
+
+```ts
+export class Flyout extends LitElement {
+    @property({ type: String })
+    title = 'Offcanvas';
+    @property({ type: Boolean })
+    backdrop: boolean | 'static' = false;
+    @property({ type: Boolean, reflect: true })
+    show: boolean = false;
+    @property({ type: String })
+    size: 'sm' | 'md' | 'lg' | 'xl' = 'sm';
+    @property({ type: String })
+    placement: 'start' | 'end' | 'top' | 'bottom' = 'start';
+    @property({ type: String })
+    id: string = '';
+    static get styles() {
+        return css `
+      ${unsafeCSS(customStyles)}
+    `;
+    }
+    constructor() {
+        super();
+    }
+    updated(changedProperties: PropertyValues) {
+        super.updated(changedProperties);
+        if (changedProperties.has('show')) {
+            this._updateBackdropClass();
+            if (!this.show) {
+                this._closeFlyout();
+                this.dispatchEvent(new CustomEvent('flyoutHidden', { bubbles: true, composed: true }));
+            }
+        }
+    }
+    _closeFlyout() {
+        this.dispatchEvent(new CustomEvent('close', { bubbles: true, composed: true }));
+    }
+    _updateBackdropClass() {
+        if (this.show === true || this.backdrop === 'static') {
+            this.classList.add('offcanvas-backdrop');
+        }
+        else {
+            this.classList.remove('offcanvas-backdrop');
+        }
+    }
+    connectedCallback() {
+        super.connectedCallback();
+        this.addEventListener('close', this._handleClose as EventListener);
+    }
+    disconnectedCallback() {
+        super.disconnectedCallback();
+        this.removeEventListener('close', this._handleClose as EventListener);
+    }
+    private _handleClose(event: CustomEvent) {
+        this.dispatchEvent(new CustomEvent('onClose', {
+            detail: event.detail,
+            bubbles: true,
+            composed: true,
+        }));
+    }
+    render() {
+        return html `
+      <div
+        id=${this.id}
+        class="offcanvas offcanvas-${this.size} offcanvas-${this.placement}
+        ${this.show ? 'show' : ''}"
+        tabindex="-1"
+      >
+        <slot></slot>
+      </div>
+    `;
+    }
+}
+
+```
+
+## 
+**AST Node Type:** *PropertyDeclaration*
+
+#### JSDoc annotations:
+
+Title for the Flyout component.
+
+```bash
+@type {string}
+
+@default 'Offcanvas'
+```
+
+#### Code:
+
+```ts
+title = 'Offcanvas';
+
+```
+
+## 
+**AST Node Type:** *PropertyDeclaration*
+
+#### JSDoc annotations:
+
+Determines if the Flyout backdrop is enabled or set to static.
+
+```bash
+@type {boolean | 'static'}
+
+@default false
+```
+
+#### Code:
+
+```ts
+backdrop: boolean | 'static';
+false;
+
+```
+
+## 
+**AST Node Type:** *PropertyDeclaration*
+
+#### JSDoc annotations:
+
+Controls the visibility of the Flyout component.
+
+```bash
+@type {boolean}
+
+@default false
+```
+
+#### Code:
+
+```ts
+show: boolean = false;
+
+```
+
+## 
+**AST Node Type:** *PropertyDeclaration*
+
+#### JSDoc annotations:
+
+Specifies the size of the Flyout component.
+
+```bash
+@type {'sm' | 'md' | 'lg' | 'xl'}
+
+@default 'sm'
+```
+
+#### Code:
+
+```ts
+size: 'sm' | 'md' | 'lg' | 'xl';
+'sm';
+
+```
+
+## 
+**AST Node Type:** *PropertyDeclaration*
+
+#### JSDoc annotations:
+
+Defines the placement of the Flyout on the screen.
+
+```bash
+@type {'start' | 'end' | 'top' | 'bottom'}
+
+@default 'start'
+```
+
+#### Code:
+
+```ts
+placement: 'start' | 'end' | 'top' | 'bottom';
+'start';
+
+```
+
+## 
+**AST Node Type:** *PropertyDeclaration*
+
+#### JSDoc annotations:
+
+Specifies the unique ID for the Flyout component.
+
+```bash
+@type {string}
+
+@default ''
+```
+
+#### Code:
+
+```ts
+id: string = '';
+
+```
+
+## 
+**AST Node Type:** *GetAccessor*
+
+#### JSDoc annotations:
+
+Provides the styles for the Flyout component, including custom styles.
+
+```bash
+@returns {CSSResultGroup} The component's CSS styles.
+```
+
+#### Code:
+
+```ts
+get;
+styles();
+{
+    return css `
+      ${unsafeCSS(customStyles)}
+    `;
+}
+
+```
+
+## updated
+`src/components/Flyout/Flyout`
+
+**AST Node Type:** *MethodDeclaration*
+
+#### JSDoc annotations:
+
+Lifecycle method called when the component updates.
+Checks if the 'show' property has changed and updates the backdrop class accordingly.
+
+```bash
+@param {PropertyValues} changedProperties - Map of changed properties with their previous values.
+```
+
+#### Code:
+
+```ts
+export class Flyout extends LitElement {
+    @property({ type: String })
+    title = 'Offcanvas';
+    @property({ type: Boolean })
+    backdrop: boolean | 'static' = false;
+    @property({ type: Boolean, reflect: true })
+    show: boolean = false;
+    @property({ type: String })
+    size: 'sm' | 'md' | 'lg' | 'xl' = 'sm';
+    @property({ type: String })
+    placement: 'start' | 'end' | 'top' | 'bottom' = 'start';
+    @property({ type: String })
+    id: string = '';
+    static get styles() {
+        return css `
+      ${unsafeCSS(customStyles)}
+    `;
+    }
+    constructor() {
+        super();
+    }
+    updated(changedProperties: PropertyValues) {
+        super.updated(changedProperties);
+        if (changedProperties.has('show')) {
+            this._updateBackdropClass();
+            if (!this.show) {
+                this._closeFlyout();
+                this.dispatchEvent(new CustomEvent('flyoutHidden', { bubbles: true, composed: true }));
+            }
+        }
+    }
+    _closeFlyout() {
+        this.dispatchEvent(new CustomEvent('close', { bubbles: true, composed: true }));
+    }
+    _updateBackdropClass() {
+        if (this.show === true || this.backdrop === 'static') {
+            this.classList.add('offcanvas-backdrop');
+        }
+        else {
+            this.classList.remove('offcanvas-backdrop');
+        }
+    }
+    connectedCallback() {
+        super.connectedCallback();
+        this.addEventListener('close', this._handleClose as EventListener);
+    }
+    disconnectedCallback() {
+        super.disconnectedCallback();
+        this.removeEventListener('close', this._handleClose as EventListener);
+    }
+    private _handleClose(event: CustomEvent) {
+        this.dispatchEvent(new CustomEvent('onClose', {
+            detail: event.detail,
+            bubbles: true,
+            composed: true,
+        }));
+    }
+    render() {
+        return html `
+      <div
+        id=${this.id}
+        class="offcanvas offcanvas-${this.size} offcanvas-${this.placement}
+        ${this.show ? 'show' : ''}"
+        tabindex="-1"
+      >
+        <slot></slot>
+      </div>
+    `;
+    }
+}
+
+```
+
+## _closeFlyout
+`src/components/Flyout/Flyout`
+
+**AST Node Type:** *MethodDeclaration*
+
+#### JSDoc annotations:
+
+Dispatches a close event when the Flyout is hidden or closed.
+
+```bash
+@private
+```
+
+#### Code:
+
+```ts
+export class Flyout extends LitElement {
+    @property({ type: String })
+    title = 'Offcanvas';
+    @property({ type: Boolean })
+    backdrop: boolean | 'static' = false;
+    @property({ type: Boolean, reflect: true })
+    show: boolean = false;
+    @property({ type: String })
+    size: 'sm' | 'md' | 'lg' | 'xl' = 'sm';
+    @property({ type: String })
+    placement: 'start' | 'end' | 'top' | 'bottom' = 'start';
+    @property({ type: String })
+    id: string = '';
+    static get styles() {
+        return css `
+      ${unsafeCSS(customStyles)}
+    `;
+    }
+    constructor() {
+        super();
+    }
+    updated(changedProperties: PropertyValues) {
+        super.updated(changedProperties);
+        if (changedProperties.has('show')) {
+            this._updateBackdropClass();
+            if (!this.show) {
+                this._closeFlyout();
+                this.dispatchEvent(new CustomEvent('flyoutHidden', { bubbles: true, composed: true }));
+            }
+        }
+    }
+    _closeFlyout() {
+        this.dispatchEvent(new CustomEvent('close', { bubbles: true, composed: true }));
+    }
+    _updateBackdropClass() {
+        if (this.show === true || this.backdrop === 'static') {
+            this.classList.add('offcanvas-backdrop');
+        }
+        else {
+            this.classList.remove('offcanvas-backdrop');
+        }
+    }
+    connectedCallback() {
+        super.connectedCallback();
+        this.addEventListener('close', this._handleClose as EventListener);
+    }
+    disconnectedCallback() {
+        super.disconnectedCallback();
+        this.removeEventListener('close', this._handleClose as EventListener);
+    }
+    private _handleClose(event: CustomEvent) {
+        this.dispatchEvent(new CustomEvent('onClose', {
+            detail: event.detail,
+            bubbles: true,
+            composed: true,
+        }));
+    }
+    render() {
+        return html `
+      <div
+        id=${this.id}
+        class="offcanvas offcanvas-${this.size} offcanvas-${this.placement}
+        ${this.show ? 'show' : ''}"
+        tabindex="-1"
+      >
+        <slot></slot>
+      </div>
+    `;
+    }
+}
+
+```
+
+## _updateBackdropClass
+`src/components/Flyout/Flyout`
+
+**AST Node Type:** *MethodDeclaration*
+
+#### JSDoc annotations:
+
+Updates the backdrop class based on the `show` and `backdrop` properties.
+Adds the 'offcanvas-backdrop' class if `show` is true or `backdrop` is 'static',
+otherwise removes the class.
+
+```bash
+@private
+```
+
+#### Code:
+
+```ts
+export class Flyout extends LitElement {
+    @property({ type: String })
+    title = 'Offcanvas';
+    @property({ type: Boolean })
+    backdrop: boolean | 'static' = false;
+    @property({ type: Boolean, reflect: true })
+    show: boolean = false;
+    @property({ type: String })
+    size: 'sm' | 'md' | 'lg' | 'xl' = 'sm';
+    @property({ type: String })
+    placement: 'start' | 'end' | 'top' | 'bottom' = 'start';
+    @property({ type: String })
+    id: string = '';
+    static get styles() {
+        return css `
+      ${unsafeCSS(customStyles)}
+    `;
+    }
+    constructor() {
+        super();
+    }
+    updated(changedProperties: PropertyValues) {
+        super.updated(changedProperties);
+        if (changedProperties.has('show')) {
+            this._updateBackdropClass();
+            if (!this.show) {
+                this._closeFlyout();
+                this.dispatchEvent(new CustomEvent('flyoutHidden', { bubbles: true, composed: true }));
+            }
+        }
+    }
+    _closeFlyout() {
+        this.dispatchEvent(new CustomEvent('close', { bubbles: true, composed: true }));
+    }
+    _updateBackdropClass() {
+        if (this.show === true || this.backdrop === 'static') {
+            this.classList.add('offcanvas-backdrop');
+        }
+        else {
+            this.classList.remove('offcanvas-backdrop');
+        }
+    }
+    connectedCallback() {
+        super.connectedCallback();
+        this.addEventListener('close', this._handleClose as EventListener);
+    }
+    disconnectedCallback() {
+        super.disconnectedCallback();
+        this.removeEventListener('close', this._handleClose as EventListener);
+    }
+    private _handleClose(event: CustomEvent) {
+        this.dispatchEvent(new CustomEvent('onClose', {
+            detail: event.detail,
+            bubbles: true,
+            composed: true,
+        }));
+    }
+    render() {
+        return html `
+      <div
+        id=${this.id}
+        class="offcanvas offcanvas-${this.size} offcanvas-${this.placement}
+        ${this.show ? 'show' : ''}"
+        tabindex="-1"
+      >
+        <slot></slot>
+      </div>
+    `;
+    }
+}
+
+```
+
+## render
+`src/components/Flyout/Flyout`
+
+**AST Node Type:** *MethodDeclaration*
+
+#### JSDoc annotations:
+
+Renders the Flyout component with specified size, placement, and visibility.
+
+```bash
+@returns {TemplateResult} The template for the Flyout component.
+```
+
+#### Code:
+
+```ts
+export class Flyout extends LitElement {
+    @property({ type: String })
+    title = 'Offcanvas';
+    @property({ type: Boolean })
+    backdrop: boolean | 'static' = false;
+    @property({ type: Boolean, reflect: true })
+    show: boolean = false;
+    @property({ type: String })
+    size: 'sm' | 'md' | 'lg' | 'xl' = 'sm';
+    @property({ type: String })
+    placement: 'start' | 'end' | 'top' | 'bottom' = 'start';
+    @property({ type: String })
+    id: string = '';
+    static get styles() {
+        return css `
+      ${unsafeCSS(customStyles)}
+    `;
+    }
+    constructor() {
+        super();
+    }
+    updated(changedProperties: PropertyValues) {
+        super.updated(changedProperties);
+        if (changedProperties.has('show')) {
+            this._updateBackdropClass();
+            if (!this.show) {
+                this._closeFlyout();
+                this.dispatchEvent(new CustomEvent('flyoutHidden', { bubbles: true, composed: true }));
+            }
+        }
+    }
+    _closeFlyout() {
+        this.dispatchEvent(new CustomEvent('close', { bubbles: true, composed: true }));
+    }
+    _updateBackdropClass() {
+        if (this.show === true || this.backdrop === 'static') {
+            this.classList.add('offcanvas-backdrop');
+        }
+        else {
+            this.classList.remove('offcanvas-backdrop');
+        }
+    }
+    connectedCallback() {
+        super.connectedCallback();
+        this.addEventListener('close', this._handleClose as EventListener);
+    }
+    disconnectedCallback() {
+        super.disconnectedCallback();
+        this.removeEventListener('close', this._handleClose as EventListener);
+    }
+    private _handleClose(event: CustomEvent) {
+        this.dispatchEvent(new CustomEvent('onClose', {
+            detail: event.detail,
+            bubbles: true,
+            composed: true,
+        }));
+    }
+    render() {
+        return html `
+      <div
+        id=${this.id}
+        class="offcanvas offcanvas-${this.size} offcanvas-${this.placement}
+        ${this.show ? 'show' : ''}"
+        tabindex="-1"
+      >
+        <slot></slot>
+      </div>
+    `;
+    }
+}
+
+```
+

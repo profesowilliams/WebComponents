@@ -1,4 +1,4 @@
-// src/components/Lit/Accordion/index.ts
+// src/components/Accordion/index.ts
 export * from './Accordion';
 export * from './AccordionBody';
 export * from './AccordionButton';

@@ -1,2 +1,2 @@
-// src/components/Lit/Toast/ToastBody/index.ts
-export { ToastBody } from "./ToastBody";
+// src/components/Toast/ToastBody/index.ts
+export { ToastBody } from './ToastBody';

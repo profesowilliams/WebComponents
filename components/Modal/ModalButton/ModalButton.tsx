@@ -1,4 +1,4 @@
-// src/components/Lit/ModalButton.tsx
+// src/components/ModalButton.tsx
 import { LitElement, html, css, unsafeCSS, PropertyValues } from 'lit';
 import { property } from 'lit/decorators.js';
 import '../../Button';

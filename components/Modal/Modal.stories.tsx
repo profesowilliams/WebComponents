@@ -1,13 +1,7 @@
 import { html, TemplateResult } from 'lit';
 import { action } from '@storybook/addon-actions';
 import '../Button';
-import './index';
-import './ModalHeader';
-import './ModalTitle';
-import './ModalBody';
-import './ModalFooter';
-import './ModalButton';
-import './ModalClose';
+import '.';
 
 interface ModalArgs {
   theme: 'light' | 'dark';
@@ -38,7 +32,8 @@ const renderModal = (args: ModalArgs): TemplateResult => html`
 
 export default {
   title: 'Components/Modal',
-  component: 'tds-modal',
+  component: 'Modal',
+  subcomponents: { ModalHeader: 'tds-modal-header', ModalBody: 'tds-modal-body', ModalFooter: 'tds-modal-footer', ModalButton: 'tds-modal-button', ModalClose: 'tds-modal-close', ModalTitle: 'tds-modal-title' },
   tags: ['autodocs'],
   render: (args: ModalArgs) => renderModal(args),
   parameters: {
@@ -124,18 +119,7 @@ export default {
       },
     },
     placement: {
-      options: [
-        'top-left',
-        'top-center',
-        'top-right',
-        'middle-left',
-        'middle-center',
-        'middle-right',
-        'bottom-left',
-        'bottom-center',
-        'bottom-right',
-        'inline',
-      ],
+      options: ['top-left', 'top-center', 'top-right', 'middle-left', 'middle-center', 'middle-right', 'bottom-left', 'bottom-center', 'bottom-right', 'inline'],
       control: 'select',
       description: 'Determines if the modal has a backdrop.',
       table: {

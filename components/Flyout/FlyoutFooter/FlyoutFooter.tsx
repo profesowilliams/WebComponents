@@ -1,5 +1,5 @@
-// src/components/Lit/Flyout/FlyoutFooter.tsx
-import { LitElement, html, css, unsafeCSS } from "lit";
+// src/components/Flyout/FlyoutFooter.tsx
+import { LitElement, html, css, unsafeCSS } from 'lit';
 import customStyles from './FlyoutFooter.scss?inline';
 
 export class FlyoutFooter extends LitElement {

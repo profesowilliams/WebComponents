@@ -1,2 +1,2 @@
-// src/components/Lit/Input/Button/index.ts
+// src/components/Input/Button/index.ts
 export { ButtonInput } from './Button';

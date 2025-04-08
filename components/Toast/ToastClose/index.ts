@@ -1,2 +1,2 @@
-// src/components/Lit/Toast/ToastClose/index.ts
-export { ToastClose } from "./ToastClose";
+// src/components/Toast/ToastClose/index.ts
+export { ToastClose } from './ToastClose';

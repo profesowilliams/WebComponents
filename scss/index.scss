@@ -2,8 +2,8 @@
 @import 'bootstrap/scss/bootstrap.scss';
 @import 'bootstrap/scss/bootstrap-utilities.scss';
 
-// @use '../components/Lit/Accordion';
-// @use '../components/Lit/Button';
+// @use '../components/Accordion';
+// @use '../components/Button';
 
 // Custom.scss
 // Option B: Include parts of Bootstrap
@@ -36,4 +36,3 @@
 
 // 7. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
 // @import 'bootstrap/scss/utilities/api';
-

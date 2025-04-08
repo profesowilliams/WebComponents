@@ -1,2 +1,2 @@
-// src/components/Lit/Input/Range/index.ts
+// src/components/Input/Range/index.ts
 export { RangeInput } from './Range';

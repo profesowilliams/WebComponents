@@ -1,0 +1,43 @@
+# tds-button
+
+## Examples
+
+```html
+// Example usage in HTML:
+<tds-button
+  primary
+  size="large"
+  background-color="blue"
+  variant="secondary"
+>Click Me</tds-button>
+```
+
+```javascript
+// Example usage in JavaScript:
+const button = document.createElement('tds-button');
+button.label = 'Click Me';
+button.primary = true;
+button.addEventListener('click', () => console.log('Button clicked!'));
+document.body.appendChild(button);
+```
+
+## Properties
+
+| Property          | Attribute         | Type                             | Default     | Description                                      |
+|-------------------|-------------------|----------------------------------|-------------|--------------------------------------------------|
+| `backgroundColor` | `backgroundColor` | `string`                         | "''"        | The background color of the button.              |
+| `className`       | `className`       | `string`                         | "''"        | The custom class name for the button.            |
+| `color`           | `color`           | `string`                         | "''"        | The color of the button.                         |
+| `compact`         | `compact`         | `boolean`                        | "false"     | Indicates whether the button should have a compact style. |
+| `disabled`        | `disabled`        | `boolean`                        | "false"     | Indicates whether the button is disabled.        |
+| `id`              | `id`              | `string`                         | "''"        | The ID of the button element.                    |
+| `label`           | `label`           | `string`                         | "''"        | The label displayed on the button.               |
+| `name`            | `name`            | `string`                         | "''"        | The name of the button element.                  |
+| `onClick`         |                   | `() => void`                     | "() => {}"  | Click handler for the button.                    |
+| `primary`         | `primary`         | `boolean`                        | "false"     | Indicates whether the button is a primary button. |
+| `size`            | `size`            | `'small' \| 'medium' \| 'large'` | "'medium'"  | The size of the button. Can be 'small', 'medium', or 'large'. |
+| `target`          | `target`          | `string`                         | "''"        | The target attribute for the link, used if the button type is 'link'. |
+| `theme`           | `theme`           | `string`                         | "'light'"   | The theme of the button. Can be 'light' or 'dark'. |
+| `type`            | `type`            | `'button' \| 'link'`             | "'button'"  | The type of the button, either 'button' or 'link'. |
+| `url`             | `url`             | `string`                         | "''"        | The URL to navigate to if the button type is 'link'. |
+| `variant`         | `variant`         | `string`                         | "'primary'" | The visual variant of the button. Can be 'primary', 'secondary', etc. |

@@ -1,4 +1,4 @@
-// src/components/Lit/Card/index.ts
+// src/components/Card/index.ts
 export * from './Card';
 export * from './CardBody';
 export * from './CardText';

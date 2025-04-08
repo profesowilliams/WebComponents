@@ -1,2 +1,2 @@
-// src/components/Lit/Card/CardBody/index.ts
+// src/components/Card/CardBody/index.ts
 export { CardBody } from './CardBody';

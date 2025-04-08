@@ -1,0 +1,37 @@
+# tds-tooltip
+
+## Properties
+
+| Property                        | Attribute                       | Type                                             | Default     |
+|---------------------------------|---------------------------------|--------------------------------------------------|-------------|
+| `arrow`                         | `arrow`                         | `boolean`                                        | true        |
+| `arrowPadding`                  | `arrowPadding`                  | `number`                                         | 0           |
+| `autoPlacement`                 | `autoPlacement`                 | `boolean`                                        | false       |
+| `flip`                          | `flip`                          | `boolean`                                        | true        |
+| `flipAlignment`                 | `flipAlignment`                 | `boolean`                                        | true        |
+| `flipCrossAxis`                 | `flipCrossAxis`                 | `boolean`                                        | true        |
+| `flipFallbackAxisSideDirection` | `flipFallbackAxisSideDirection` | `"start" \| "end" \| "none"`                     | "none"      |
+| `flipFallbackPlacements`        | `flipFallbackPlacements`        | `Placement[]`                                    | []          |
+| `flipFallbackStrategy`          | `flipFallbackStrategy`          | `"bestFit" \| "initialPlacement"`                | "bestFit"   |
+| `flipMainAxis`                  | `flipMainAxis`                  | `boolean`                                        | true        |
+| `height`                        | `height`                        | `string \| undefined`                            | "undefined" |
+| `hide`                          | `hide`                          | `boolean`                                        | false       |
+| `inline`                        | `inline`                        | `boolean`                                        | false       |
+| `offset`                        | `offset`                        | `number \| { mainAxis?: number \| undefined; crossAxis?: number \| undefined; alignmentAxis?: number \| null \| undefined; } \| ((args: { rects: any; }) => any)` | 10          |
+| `placement`                     | `placement`                     | `Placement`                                      | "bottom"    |
+| `shift`                         | `shift`                         | `boolean`                                        | true        |
+| `shiftCrossAxis`                | `shiftCrossAxis`                | `boolean`                                        | false       |
+| `shiftLimiterOffset`            | `shiftLimiterOffset`            | `number \| { mainAxis?: number \| undefined; crossAxis?: number \| undefined; } \| ((args: { rects: any; placement: Placement; }) => any)` | 0           |
+| `shiftMainAxis`                 | `shiftMainAxis`                 | `boolean`                                        | true        |
+| `size`                          | `size`                          | `boolean`                                        | false       |
+| `strategy`                      | `strategy`                      | `Strategy`                                       | "fixed"     |
+| `text`                          | `text`                          | `string \| undefined`                            | "undefined" |
+| `type`                          | `type`                          | `"text" \| "html"`                               | "text"      |
+| `width`                         | `width`                         | `string \| undefined`                            | "undefined" |
+
+## Methods
+
+| Method        | Type                |
+|---------------|---------------------|
+| `hideTooltip` | `(): void`          |
+| `showTooltip` | `(): Promise<void>` |

@@ -1,6 +1,6 @@
-// src/components/Lit/Toast/ToastBody/ToastBody.tsx
-import { LitElement, html, css, unsafeCSS } from "lit";
-import customStyles from "./ToastBody.scss?inline";
+// src/components/Toast/ToastBody/ToastBody.tsx
+import { LitElement, html, css, unsafeCSS } from 'lit';
+import customStyles from './ToastBody.scss?inline';
 
 export class ToastBody extends LitElement {
   static get styles() {
@@ -14,4 +14,4 @@ export class ToastBody extends LitElement {
   }
 }
 
-customElements.define("tds-toast-body", ToastBody);
+customElements.define('tds-toast-body', ToastBody);

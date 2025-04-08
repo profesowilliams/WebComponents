@@ -1,0 +1,23 @@
+# tds-flyout
+
+A Flyout component that renders an offcanvas-style element with configurable
+title, backdrop, size, and placement options.
+
+## Properties
+
+| Property    | Attribute   | Type                                    | Default       | Description                                      |
+|-------------|-------------|-----------------------------------------|---------------|--------------------------------------------------|
+| `backdrop`  | `backdrop`  | `boolean \| 'static'`                   | "false"       | Determines if the Flyout backdrop is enabled or set to static. |
+| `id`        | `id`        | `string`                                | "''"          | Specifies the unique ID for the Flyout component. |
+| `placement` | `placement` | `'start' \| 'end' \| 'top' \| 'bottom'` | "'start'"     | Defines the placement of the Flyout on the screen. |
+| `show`      | `show`      | `boolean`                               | "false"       | Controls the visibility of the Flyout component. |
+| `size`      | `size`      | `'sm' \| 'md' \| 'lg' \| 'xl'`          | "'sm'"        | Specifies the size of the Flyout component.      |
+| `title`     | `title`     | `string`                                | "'Offcanvas'" | Title for the Flyout component.                  |
+
+## Events
+
+| Event          | Type               |
+|----------------|--------------------|
+| `close`        |                    |
+| `flyoutHidden` |                    |
+| `onClose`      | `CustomEvent<any>` |

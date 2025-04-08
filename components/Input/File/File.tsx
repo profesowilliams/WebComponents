@@ -3,7 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import customStyles from './File.scss?inline';
 
-import { mimeTypeToLabel } from '../../../../constants/mimeTypes';
+import { mimeTypeToLabel } from '../../../constants/mimeTypes';
 
 import './FileClose';
 

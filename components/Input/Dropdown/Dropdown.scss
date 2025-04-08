@@ -1,6 +1,6 @@
-// src/components/Lit/Input/Dropdown/Dropdown.scss
+// src/components/Input/Dropdown/Dropdown.scss
 @use 'sass:map';
-@use '../../../../scss/abstracts/' as *;
+@use '../../../scss/abstracts/' as *;
 @import '../Text';
 
 .autocomplete__container {
@@ -63,7 +63,8 @@
   color: var(--black, map.get($color-palette, 'black'));
 }
 
-.autocomplete__results > li:focus, .highlighted {
+.autocomplete__results > li:focus,
+.highlighted {
   background: var(--teal, map.get($color-palette, 'teal'));
   color: var(--white, map.get($color-palette, 'white'));
 }

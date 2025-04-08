@@ -1,2 +1,2 @@
-// src/components/Lit/Input/Search/index.ts
+// src/components/Input/Search/index.ts
 export { SearchInput } from './Search';

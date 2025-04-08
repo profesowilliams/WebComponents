@@ -1,2 +1,2 @@
-// src/components/Lit/Input/Date/index.ts
+// src/components/Input/Date/index.ts
 export { DateInput } from './Date';

@@ -1,2 +1,2 @@
-// src/components/Lit/Flyout/FlyoutBody/index.ts
-export { FlyoutBody } from "./FlyoutBody";
+// src/components/Flyout/FlyoutBody/index.ts
+export { FlyoutBody } from './FlyoutBody';

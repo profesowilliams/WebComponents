@@ -1,2 +1,2 @@
-// src/components/Lit/Notification/NotificationClose/index.ts
-export { NotificationClose } from "./NotificationClose";
+// src/components/Notification/NotificationClose/index.ts
+export { NotificationClose } from './NotificationClose';

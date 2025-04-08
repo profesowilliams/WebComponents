@@ -1,2 +1,2 @@
-// src/components/Lit/Input/DatetimeLocal/index.ts
+// src/components/Input/DatetimeLocal/index.ts
 export { DatetimeLocalInput } from './DatetimeLocal';

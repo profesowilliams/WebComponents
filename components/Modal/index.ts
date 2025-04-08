@@ -1,4 +1,4 @@
-// src/components/Lit/Modal/index.ts
+// src/components/Modal/index.ts
 export * from './Modal';
 export * from './ModalBody';
 export * from './ModalButton';

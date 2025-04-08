@@ -1,24 +1,25 @@
-// src/components/Lit/Input/Text.scss
+// src/components/Input/Text.scss
 @use 'sass:map';
-@use '../../../../scss/abstracts/' as *;
+@use '../../../scss/abstracts/' as *;
 @import 'bootstrap/scss/forms/floating-labels';
 @import 'bootstrap/scss/forms/form-text';
 @import 'bootstrap/scss/forms/validation';
 @import 'bootstrap/scss/forms/labels';
 
 :host([required]) tds-textfield {
-  --bs-border-color: var(--bs-danger);
+  --bs-border-color: #{var(--bs-danger)};
 }
 
 :host {
-  --bs-border-color: var(--teal, map.get($color-palette, 'teal'));
+  --bs-input-font-size: var(--input-font-size, 1rem);
+  --bs-border-color: #{var(--teal, map.get($color-palette, 'teal'))};
 }
 
 .form-control {
   display: block;
   width: 100%;
   padding: 0.375rem 0.75rem;
-  font-size: 1rem;
+  font-size: var(--bs-input-font-size);
   font-weight: 400;
   line-height: 1.5;
   color: var(--bs-body-color);
@@ -35,8 +36,7 @@
   color: var(--bs-body-color);
   background-color: var(--bs-body-bg);
   background-clip: padding-box;
-  border: var(--bs-border-width) solid
-    var(--Teal, map.get($color-palette, 'teal'));
+  border: var(--bs-border-width) solid var(--Teal, map.get($color-palette, 'teal'));
   border-bottom: 2px solid var(--Teal, map.get($color-palette, 'teal')) !important;
   outline: 0;
   box-shadow: none;
@@ -148,7 +148,7 @@ textarea.form-control {
     color: var(--Cool-Gray-8, #888b8d);
     /* H9 */
     font-family: Arial;
-    font-size: 1rem;
+    font-size: var(--bs-input-font-size);
     font-style: normal;
     font-weight: 400;
     line-height: 150%; /* 1.5rem */
@@ -157,8 +157,7 @@ textarea.form-control {
   &:focus {
     color: var(--bs-body-color);
     background-color: var(--bs-body-bg);
-    border: var(--bs-border-width) solid
-      var(--teal, map.get($color-palette, 'teal'));
+    border: var(--bs-border-width) solid var(--teal, map.get($color-palette, 'teal'));
     outline: 0;
     box-shadow: none;
   }

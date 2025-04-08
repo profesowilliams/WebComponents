@@ -1,2 +1,2 @@
-// src/components/Lit/Close/index.ts
-export { CloseButton } from "./Close";
+// src/components/Close/index.ts
+export { CloseButton } from './Close';

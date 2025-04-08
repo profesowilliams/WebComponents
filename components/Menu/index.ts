@@ -1,4 +1,4 @@
-// src/components/Lit/Menu/index.ts
+// src/components/Menu/index.ts
 export * from './Menu';
 export * from './MenuItem';
 export * from './MenuIcon';

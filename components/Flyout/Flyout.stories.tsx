@@ -1,11 +1,5 @@
 import { TemplateResult, html } from 'lit';
 import './Flyout';
-import './FlyoutHeader';
-import './FlyoutTitle';
-import './FlyoutBody';
-import './FlyoutButton';
-import './FlyoutClose';
-import './FlyoutFooter';
 
 interface FlyoutArgs {
   id: string;

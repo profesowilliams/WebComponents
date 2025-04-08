@@ -1,2 +1,2 @@
-// src/components/Lit/Logo/index.ts
+// src/components/Logo/index.ts
 export { Logo } from './Logo';

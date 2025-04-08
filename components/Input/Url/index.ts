@@ -1,2 +1,2 @@
-// src/components/Lit/Input/Url/index.ts
+// src/components/Input/Url/index.ts
 export { UrlInput } from './Url';

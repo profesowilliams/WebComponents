@@ -1,0 +1,73 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Components/Button" />
+
+## ButtonProps
+`src/components/Button/Button`
+
+**AST Node Type:** *InterfaceDeclaration*
+
+#### JSDoc annotations:
+
+
+
+```bash
+@prop {boolean} primary - Indicates if the button is primary
+
+@prop {boolean} disabled - Checks if the button should be disabled
+
+@prop {string} type - The type of the button (e.g., 'button' or 'link')
+
+@prop {string} link - The URL link for the button if type is 'link'
+
+@prop {string} variant - The variant of the button (e.g., 'primary', 'secondary')
+
+@prop {string} theme - The theme of the button
+
+@prop {boolean} compact - Indicates if the button should be compact
+
+@prop {string} id - The id of the button
+
+@prop {string} name - The name of the button
+
+@prop {string} className - The class of the button
+
+@prop {string} label - The label of the button
+
+@prop {string} color - The color of the button
+
+@prop {string} size - The size of the button (e.g., 'small', 'medium', 'large')
+
+@prop {string} backgroundColor - The background color of the button
+
+@prop {function} onClick - The click handler for the button
+
+@summary This is a custom button element
+
+@tag tds-button
+```
+
+#### Code:
+
+```ts
+export interface ButtonProps {
+    primary?: boolean;
+    backgroundColor?: string;
+    size?: 'small' | 'medium' | 'large';
+    label: string;
+    onClick?: () => void;
+    disabled?: boolean;
+    type?: string;
+    url?: string;
+    target?: string;
+    variant?: string;
+    theme?: string;
+    id?: string;
+    name?: string;
+    className?: string;
+    color?: string;
+    compact?: boolean;
+}
+
+```
+

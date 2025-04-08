@@ -1,2 +1,2 @@
-// src/components/Lit/Template/index.ts
+// src/components/Template/index.ts
 export { Template } from './Template';

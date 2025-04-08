@@ -1,2 +1,2 @@
-// src/components/Lit/Modal/ModalHeader/index.ts
-export { ModalHeader } from "./ModalHeader";
+// src/components/Modal/ModalHeader/index.ts
+export { ModalHeader } from './ModalHeader';

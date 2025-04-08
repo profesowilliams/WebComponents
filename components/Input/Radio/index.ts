@@ -1,2 +1,2 @@
-// src/components/Lit/Input/Radio/index.ts
+// src/components/Input/Radio/index.ts
 export { Radio } from './Radio';

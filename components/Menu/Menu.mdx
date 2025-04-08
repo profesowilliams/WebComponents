@@ -1,0 +1,32 @@
+# tds-menu
+
+## Properties
+
+| Property                        | Attribute                       | Type                                             | Default             |
+|---------------------------------|---------------------------------|--------------------------------------------------|---------------------|
+| `alignment`                     | `alignment`                     | `"start" \| "end" \| undefined`                  | "undefined"         |
+| `allowedPlacements`             | `allowedPlacements`             | `Placement[] \| undefined`                       | "undefined"         |
+| `arrow`                         | `arrow`                         | `boolean`                                        | true                |
+| `arrowPadding`                  | `arrowPadding`                  | `number`                                         | 0                   |
+| `autoAlignment`                 | `autoAlignment`                 | `boolean`                                        | true                |
+| `autoPlacement`                 | `autoPlacement`                 | `boolean`                                        | false               |
+| `boundary`                      | `boundary`                      | `Boundary`                                       | "clippingAncestors" |
+| `flip`                          | `flip`                          | `boolean`                                        | true                |
+| `flipAlignment`                 | `flipAlignment`                 | `boolean`                                        | true                |
+| `flipCrossAxis`                 | `flipCrossAxis`                 | `boolean`                                        | true                |
+| `flipFallbackAxisSideDirection` | `flipFallbackAxisSideDirection` | `"start" \| "end" \| "none"`                     | "none"              |
+| `flipFallbackPlacements`        | `flipFallbackPlacements`        | `Placement[]`                                    | []                  |
+| `flipFallbackStrategy`          | `flipFallbackStrategy`          | `"bestFit" \| "initialPlacement"`                | "bestFit"           |
+| `flipMainAxis`                  | `flipMainAxis`                  | `boolean`                                        | true                |
+| `hide`                          | `hide`                          | `boolean`                                        | false               |
+| `inline`                        | `inline`                        | `boolean`                                        | false               |
+| `offset`                        | `offset`                        | `number`                                         | 10                  |
+| `open`                          | `open`                          | `boolean`                                        | false               |
+| `placement`                     | `placement`                     | `Placement`                                      | "bottom-start"      |
+| `shift`                         | `shift`                         | `boolean`                                        | true                |
+| `shiftCrossAxis`                | `shiftCrossAxis`                | `boolean`                                        | false               |
+| `shiftLimiterOffset`            | `shiftLimiterOffset`            | `number \| { mainAxis?: number \| undefined; crossAxis?: number \| undefined; } \| ((args: { rects: any; placement: Placement; }) => any)` | 0                   |
+| `shiftMainAxis`                 | `shiftMainAxis`                 | `boolean`                                        | true                |
+| `size`                          | `size`                          | `boolean`                                        | false               |
+| `strategy`                      | `strategy`                      | `Strategy`                                       | "fixed"             |
+| `triggerSelector`               | `triggerSelector`               | `string \| null`                                 | null                |

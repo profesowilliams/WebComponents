@@ -1,0 +1,25 @@
+# tds-checkbox
+
+`tds-checkbox` is a custom checkbox element with indeterminate state support.
+
+## Properties
+
+| Property        | Attribute       | Type      | Default | Description                                      |
+|-----------------|-----------------|-----------|---------|--------------------------------------------------|
+| `checked`       | `checked`       | `boolean` | false   | Indicates whether the checkbox is checked.       |
+| `disabled`      | `disabled`      | `boolean` | false   | Indicates whether the checkbox is disabled.      |
+| `id`            | `id`            | `string`  | ""      | The id attribute of the checkbox.                |
+| `indeterminate` | `indeterminate` | `boolean` | false   | Indicates whether the checkbox is in an indeterminate state. |
+| `label`         | `label`         | `string`  | ""      | The label for the checkbox.                      |
+
+## Methods
+
+| Method         | Type               | Description                                      |
+|----------------|--------------------|--------------------------------------------------|
+| `handleChange` | `(e: Event): void` | Handles the change event for the checkbox.<br /><br />**e**: The change event object. |
+
+## Events
+
+| Event    | Type                                             |
+|----------|--------------------------------------------------|
+| `change` | `CustomEvent<{ checked: boolean; indeterminate: boolean; }>` |

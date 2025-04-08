@@ -1,4 +1,4 @@
-// src/components/Lit/Flyout/index.ts
+// src/components/Flyout/index.ts
 export * from './Flyout';
 export * from './FlyoutBody';
 export * from './FlyoutButton';

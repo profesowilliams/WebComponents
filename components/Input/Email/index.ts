@@ -1,2 +1,2 @@
-// src/components/Lit/Input/Email/index.ts
+// src/components/Input/Email/index.ts
 export { EmailInput } from './Email';

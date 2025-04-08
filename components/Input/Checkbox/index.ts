@@ -1,2 +1,2 @@
-// src/components/Lit/Checkbox/index.ts
-export { Checkbox } from "./Checkbox";
+// src/components/Checkbox/index.ts
+export { Checkbox } from './Checkbox';

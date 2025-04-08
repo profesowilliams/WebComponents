@@ -1,2 +1,2 @@
-// src/components/Lit/File/FileClose/index.ts
-export { FileClose } from "./FileClose";
+// src/components/File/FileClose/index.ts
+export { FileClose } from './FileClose';

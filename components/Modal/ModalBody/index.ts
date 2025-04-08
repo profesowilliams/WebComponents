@@ -1,2 +1,2 @@
-// src/components/Lit/Modal/ModalBody/index.ts
-export { ModalBody } from "./ModalBody";
+// src/components/Modal/ModalBody/index.ts
+export { ModalBody } from './ModalBody';

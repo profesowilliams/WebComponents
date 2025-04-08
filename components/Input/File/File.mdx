@@ -1,0 +1,28 @@
+# tds-file-input
+
+## Properties
+
+| Property           | Attribute          | Type                   | Default                                  | Description                                      |
+|--------------------|--------------------|------------------------|------------------------------------------|--------------------------------------------------|
+| `allowedFileTypes` | `allowedFileTypes` | `string[]`             | ["application/pdf"]                      | List of allowed file types for uploads.          |
+| `buttonText`       | `buttonText`       | `string`               | "Browse file"                            | Text for the browse button.                      |
+| `files`            | `files`            | `FileUploadProgress[]` | []                                       | List of files being uploaded with their progress and error status. |
+| `headingText`      | `headingText`      | `string`               | "Drag & Drop or Choose file from device" | Heading text displayed in the drop area.         |
+| `iconName`         | `iconName`         | `string`               | "upload"                                 | Name of the icon used in the upload area.        |
+| `iconState`        | `iconState`        | `string`               | "default"                                | State of the icon used in the upload area.       |
+| `isDragOver`       | `isDragOver`       | `boolean`              | false                                    | Indicates if the drag area is active.            |
+| `maxFileSize`      | `maxFileSize`      | `string`               | "2MB"                                    | Maximum allowed file size for uploads.           |
+| `secondaryText`    | `secondaryText`    | `string`               | "Max file size"                          | Secondary text indicating file size limit.       |
+
+## Methods
+
+| Method       | Type       | Description                |
+|--------------|------------|----------------------------|
+| `clearFiles` | `(): void` | Clears all uploaded files. |
+
+## Events
+
+| Event           | Type                                             |
+|-----------------|--------------------------------------------------|
+| `file-removed`  | `CustomEvent<{ removedFile: FileUploadProgress; }>` |
+| `file-selected` | `CustomEvent<{ files: File[]; }>`                |

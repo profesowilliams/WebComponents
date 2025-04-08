@@ -1,5 +1,5 @@
 @use 'sass:map';
-@use '../../../scss/abstracts/' as *;
+@use '../../scss/abstracts/' as *;
 
 @import 'bootstrap/scss/offcanvas';
 
@@ -36,8 +36,7 @@
   outline: 0;
   visibility: hidden;
   width: var(--bs-offcanvas-width);
-  border-left: var(--bs-offcanvas-border-width) solid
-    var(--bs-offcanvas-border-color);
+  border-left: var(--bs-offcanvas-border-width) solid var(--bs-offcanvas-border-color);
   box-shadow: var(--bs-offcanvas-box-shadow);
   place-self: var(--bs-offcanvas-place-self);
   margin-top: var(--bs-offcanvas-margin-top);
@@ -79,8 +78,7 @@
 
     right: var(--bs-offcanvas-width);
     width: var(--bs-offcanvas-width);
-    border-left: var(--bs-offcanvas-border-width) solid
-      var(--bs-offcanvas-border-color);
+    border-left: var(--bs-offcanvas-border-width) solid var(--bs-offcanvas-border-color);
     transform: translateX(100%);
   }
 

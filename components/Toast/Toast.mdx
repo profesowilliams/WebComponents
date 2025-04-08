@@ -1,0 +1,32 @@
+# tds-toast
+
+Toast component to display messages or alerts with customizable placement, timeout, and styling.
+Extends LitElement to leverage web component features.
+
+## Properties
+
+| Property     | Attribute    | Type                                             | Default         | Description                                      |
+|--------------|--------------|--------------------------------------------------|-----------------|--------------------------------------------------|
+| `bottom`     | `bottom`     | `string`                                         | ""              | Bottom position for custom placement. Used only when `placement` is 'custom'. |
+| `id`         | `id`         | `string`                                         | ""              | Unique identifier for the toast.                 |
+| `left`       | `left`       | `string`                                         | ""              | Left position for custom placement. Used only when `placement` is 'custom'. |
+| `link`       | `link`       | `string`                                         | ""              | Text for the action link in the toast.           |
+| `message`    | `message`    | `string`                                         | ""              | Message displayed inside the toast.              |
+| `persistent` | `persistent` | `boolean`                                        | false           | Determines if the toast is persistent (does not auto-close).<br />When `true`, the timeout functionality is ignored. |
+| `placement`  | `placement`  | `ToastPlacement`                                 | "middle-center" | Placement of the toast on the screen.<br />Options: ToastPlacement (e.g., 'top-center', 'bottom-right'). |
+| `right`      | `right`      | `string`                                         | ""              | Right position for custom placement. Used only when `placement` is 'custom'. |
+| `show`       | `show`       | `boolean`                                        | false           | Determines if the toast is visible.              |
+| `size`       | `size`       | `'small' \| 'medium' \| 'large'`                 | "medium"        | Size of the toast. Options: 'small', 'medium', 'large'. |
+| `target`     | `target`     | `string`                                         | "_self"         | Target attribute for the action link. Default is '_self'. |
+| `timeout`    | `timeout`    | `number`                                         | 5000            | Duration (in milliseconds) before the toast automatically closes.<br />Default is 5000ms (5 seconds). |
+| `top`        | `top`        | `string`                                         | ""              | Top position for custom placement. Used only when `placement` is 'custom'. |
+| `type`       | `type`       | `string`                                         | "toast"         | Type of the toast. Can be 'banner' or 'toast'.   |
+| `url`        | `url`        | `string`                                         | ""              | URL for the action link in the toast.            |
+| `variant`    | `variant`    | `'default' \| 'information' \| 'confirmation' \| 'alert' \| 'error'` | "default"       | Visual variant of the toast. Determines its appearance.<br />Options: 'default', 'information', 'confirmation', 'alert', 'error'. |
+
+## Methods
+
+| Method                | Type         | Description                                      |
+|-----------------------|--------------|--------------------------------------------------|
+| `getCustomStyle`      | `(): string` | Returns inline styles for custom positioning when `placement` is 'custom'.<br />Only includes `top`, `right`, `bottom`, and `left` when their values are defined. |
+| `getPlacementClasses` | `(): string` | Returns CSS classes for the toast's placement based on the `placement` property.<br />If placement is 'custom', no placement classes are added. |
